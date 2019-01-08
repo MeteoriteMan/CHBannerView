@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CHPageControl.h"
+#import <CHPageControl/CHPageControl.h>
 
 @class CHBannerView;
 @protocol CHBannerViewDelegate <NSObject>
