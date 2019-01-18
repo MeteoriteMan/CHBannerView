@@ -27,6 +27,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:[[CHBannerCollectionViewFlowLayout alloc] init]];
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;

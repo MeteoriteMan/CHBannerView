@@ -50,7 +50,12 @@
         collectionViewLayout = [[CHBannerCollectionViewFlowLayout alloc] init];
     }
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:collectionViewLayout];
-        self.collectionView.backgroundColor = [UIColor clearColor];
+    if (@available(iOS 11.0, *)) {
+        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
+    self.collectionView.backgroundColor = [UIColor clearColor];
     [self addSubview:self.collectionView];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
