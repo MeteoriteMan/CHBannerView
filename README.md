@@ -67,3 +67,4 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 |版本|更新内容|
 |:--|:--|
 |0.0.1|内置一个默认FlowLayout样式.支持自定义FlowLayout.|
+|0.0.2|改了点注释,内容基本没改动|
