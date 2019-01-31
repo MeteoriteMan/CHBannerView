@@ -20,6 +20,8 @@
 @optional
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index;
 
+- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index;
+
 @end
 
 @interface CHBannerView : UIView

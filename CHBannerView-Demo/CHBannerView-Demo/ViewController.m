@@ -12,6 +12,7 @@
 #import "CHBannerCollectionViewCell.h"
 #import "CollectionViewFlowLayout.h"
 #import "CHBannerCollectionViewFlowLayout.h"
+#import "CHBannerCollectionViewFlowLayout3DStyle.h"
 
 @interface ViewController () <CHBannerViewDelegate>
 
@@ -29,7 +30,8 @@
 
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:[[CHBannerCollectionViewFlowLayout alloc] init]];
+    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
+    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
     self.bannerView.pageControl.interval = 5;
@@ -63,6 +65,14 @@
     cell.titleStr = [NSString stringWithFormat:@"%@",@(index)];
     return cell;
 
+}
+
+- (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
+//    NSLog(@"点击的是第%ld页",index);
+}
+
+- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index {
+//    NSLog(@"第%ld页",index);
 }
 
 @end

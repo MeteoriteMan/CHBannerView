@@ -143,6 +143,9 @@
         self.countPage = (offsetX + itemWidth * .5) / itemWidth;
         if (self.originalItems != 0) {
             self.pageControl.currentPage = self.countPage % self.originalItems;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:)]) {
+                [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems];
+            }
         }
     }
 }

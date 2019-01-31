@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		430AD61D21E30FAB00C2BF36 /* CHBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 430AD61921E30FAB00C2BF36 /* CHBannerView.m */; };
 		430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 430AD61C21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m */; };
+		431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */; };
 		432AE03321DF237700848863 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE03221DF237700848863 /* AppDelegate.m */; };
 		432AE03621DF237700848863 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE03521DF237700848863 /* ViewController.m */; };
 		432AE03921DF237700848863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432AE03721DF237700848863 /* Main.storyboard */; };
@@ -26,6 +27,8 @@
 		430AD61A21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		430AD61B21E30FAB00C2BF36 /* CHBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerView.h; sourceTree = "<group>"; };
 		430AD61C21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout3DStyle.h; sourceTree = "<group>"; };
+		431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout3DStyle.m; sourceTree = "<group>"; };
 		432AE02E21DF237700848863 /* CHBannerView-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CHBannerView-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		432AE03121DF237700848863 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		432AE03221DF237700848863 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 				430AD61821E30FAB00C2BF36 /* CHBannerView */,
 				432AE03121DF237700848863 /* AppDelegate.h */,
 				432AE03221DF237700848863 /* AppDelegate.m */,
+				431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */,
+				431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */,
 				432AE03421DF237700848863 /* ViewController.h */,
 				432AE03521DF237700848863 /* ViewController.m */,
 				432AE05C21DF265D00848863 /* CHBannerCollectionViewCell.h */,
@@ -247,6 +252,7 @@
 			files = (
 				430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */,
 				432AE03621DF237700848863 /* ViewController.m in Sources */,
+				431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */,
 				430AD61D21E30FAB00C2BF36 /* CHBannerView.m in Sources */,
 				432AE04121DF237900848863 /* main.m in Sources */,
 				432AE05F21DF265D00848863 /* CHBannerCollectionViewCell.m in Sources */,
