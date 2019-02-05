@@ -1,5 +1,5 @@
 PODS:
-  - CHPageControl (0.0.4)
+  - CHPageControl (0.0.5)
   - Masonry (1.1.0)
 
 DEPENDENCIES:
@@ -12,7 +12,7 @@ SPEC REPOS:
     - Masonry
 
 SPEC CHECKSUMS:
-  CHPageControl: 07a23ff6e14333d7e857f0033c982db9761fd628
+  CHPageControl: 9a748f1a8845c2975ae10eb72ab8557b4c683723
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
 PODFILE CHECKSUM: 78c93d6bebf17e4f728ac33f38e2bd71acb727b2

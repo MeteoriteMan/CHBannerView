@@ -26,14 +26,14 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self setupUI];
+        [self setConfig];
     }
     return self;
 }
 
-- (void)setupUI {
+- (void)setConfig {
+    self.defersCurrentPageDisplay = YES;
     self.isDoc = YES;
-    
 }
 
 #pragma mark setter
@@ -93,8 +93,7 @@
                         }
                             break;
                         case CHPageControlImageTypeArray: {
-                            NSAssert1(!(i > self.currentPageImageArray.count - 1), @"%s---currentPageImageArray中图片数小于CHPageControl的个数", __FUNCTION__);
-                            currentPageImage = self.currentPageImageArray[i];
+                            currentPageImage = self.currentPageImageArray[i % self.currentPageImageArray.count];
                         }
                         default:
                             break;
@@ -124,8 +123,7 @@
                         }
                             break;
                         case CHPageControlImageTypeArray: {
-                            NSAssert1(!(i > self.normalPageImageArray.count - 1), @"%s---normalPageImageArray中图片数小于CHPageControl的个数", __FUNCTION__);
-                            normalPageImage = self.normalPageImageArray[i];
+                            normalPageImage = self.normalPageImageArray[i % self.normalPageImageArray.count];
                         }
                         default:
                             break;

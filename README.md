@@ -68,3 +68,4 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 |:--|:--|
 |0.0.1|内置一个默认FlowLayout样式.支持自定义FlowLayout.|
 |0.0.2|改了点注释,内容基本没改动|
+|0.03|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|

@@ -30,8 +30,8 @@
 
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
+//    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
+    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
     self.bannerView.pageControl.interval = 5;
@@ -68,11 +68,11 @@
 }
 
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
-//    NSLog(@"点击的是第%ld页",index);
+    NSLog(@"点击的是第%ld页",index);
 }
 
 - (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index {
-//    NSLog(@"第%ld页",index);
+    NSLog(@"滚动到第%ld页",index);
 }
 
 @end
