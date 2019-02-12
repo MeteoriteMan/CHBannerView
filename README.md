@@ -23,10 +23,14 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 - (UICollectionViewCell *)bannerView:(UICollectionView *)collectionView cellForItemAtIndex:(NSInteger)index;
 ```
 
-3.点击代理实现
+3.其他代理
 
 ```
+/// 点击item的代理
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index;
+
+/// 滚动到某页的代理
+- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index;
 ```
 
 4.属性
@@ -68,4 +72,4 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 |:--|:--|
 |0.0.1|内置一个默认FlowLayout样式.支持自定义FlowLayout.|
 |0.0.2|改了点注释,内容基本没改动|
-|0.03|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|
+|0.0.3|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|
