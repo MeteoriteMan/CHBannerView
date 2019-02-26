@@ -62,8 +62,7 @@
 }
 
 - (void)setupUIWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
-    /// 应用回到前台监听
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    ///
     self.currentPage = -1;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarOrientationNotification:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -95,7 +94,6 @@
                                           ]];
 
     self.pageControl = [[CHPageControl alloc] init];
-    self.pageControl.currentPage = 2;
     self.pageControl.userInteractionEnabled = NO;
     [self addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
@@ -148,8 +146,16 @@
             if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
                 self.currentPage = self.countPage % self.originalItems;
                 self.pageControl.currentPage = self.currentPage;
-                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:)]) {
-                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems];
+                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
+                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
+                }
+            }
+        } else {//originalItems == 0
+            if (self.currentPage == -1) {///初始状态
+                self.currentPage = 0;
+                self.pageControl.currentPage = self.currentPage;
+                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
+                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:0 numberOfPages:0];
                 }
             }
         }
@@ -245,12 +251,6 @@
     [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth , 0) animated:YES];
 }
 
-/// MARK: lifeCycle
-//- (void)applicationDidBecomeActive:(NSNotification *)notification {
-//    [self invalidateTimer];
-//    [self startTimer];
-//}
-
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
 
 }
@@ -271,7 +271,6 @@
 - (void)removeFromSuperview {
     [super removeFromSuperview];
     [self stopTimer];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }

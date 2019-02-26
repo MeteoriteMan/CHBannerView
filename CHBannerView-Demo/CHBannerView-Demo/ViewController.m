@@ -84,15 +84,22 @@
     NSLog(@"点击的是第%ld页",index);
 }
 
-- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index {
-    NSLog(@"滚动到第%ld页",index);
+- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages {
+    NSLog(@"滚动到第%ld页,总共有%ld页",index ,numberOfPages);
 //    NSLog(@"%@",collectionView);
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    ViewController *vc = [[ViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-//    [self.bannerView reloadData];
+//    ViewController *vc = [[ViewController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+
+    NSInteger count = arc4random_uniform(4);
+    NSMutableArray *arrayM = [NSMutableArray array];
+    for (int i = 0; i < count; i++) {
+        [arrayM addObject:[[NSObject alloc] init]];
+    }
+    self.bannerModelArray = arrayM.copy;
+    [self.bannerView reloadData];
 }
 
 @end
