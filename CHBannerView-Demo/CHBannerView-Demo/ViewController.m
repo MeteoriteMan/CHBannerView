@@ -24,9 +24,22 @@
 
 @implementation ViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@" ,@(self.navigationController.viewControllers.count)];
+    [self.bannerView startTimer];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.bannerView stopTimer];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+
+    self.view.backgroundColor = [UIColor whiteColor];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
 
@@ -41,7 +54,7 @@
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
         make.left.right.offset(0);
-        make.height.offset(190);
+        make.height.offset(190).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
 //        make.height.equalTo(self.bannerView.mas_width).multipliedBy(186.0 / 375.0);
     }];
 
@@ -73,6 +86,13 @@
 
 - (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index {
     NSLog(@"滚动到第%ld页",index);
+//    NSLog(@"%@",collectionView);
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    ViewController *vc = [[ViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+//    [self.bannerView reloadData];
 }
 
 @end

@@ -22,10 +22,32 @@
 
 @property (nonatomic ,assign) NSUInteger countPage;
 
+/// 当前page,记录page位置,-1为初始化状态
+@property (nonatomic ,assign) NSInteger currentPage;
+
 @end
 
-@implementation CHBannerView
+@implementation CHBannerView {
+    CGFloat _timeInterval;
+}
 
+/// MARK: setter
+- (void)setShouldAutoScroll:(BOOL)shouldAutoScroll {
+    _shouldAutoScroll = shouldAutoScroll;
+    if (shouldAutoScroll) {
+        [self startTimer];
+    } else {
+        [self stopTimer];
+    }
+}
+
+- (void)setTimeInterval:(CGFloat)timeInterval {
+    _timeInterval = timeInterval;
+    [self stopTimer];
+    [self startTimer];
+}
+
+/// MARK: getter
 - (CGFloat)timeInterval {
     if (_timeInterval <= 0) {
         _timeInterval = 5;
@@ -41,7 +63,8 @@
 
 - (void)setupUIWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
     /// 应用回到前台监听
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    self.currentPage = -1;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarOrientationNotification:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     self.shouldAutoScroll = YES;
@@ -84,29 +107,7 @@
 
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (scrollView == self.collectionView) {
-        self.timer.fireDate = [NSDate distantFuture];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (scrollView == self.collectionView) {
-        self.timer.fireDate = [NSDate dateWithTimeIntervalSinceNow:self.timeInterval];
-    }
-}
-
-- (void)updateTimer {
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    CGFloat itemWidth = flowLayout.itemSize.width;
-    CGPoint contentOffset = self.collectionView.contentOffset;
-    CGFloat decimals = contentOffset.x - self.countPage * itemWidth;
-    while (decimals > itemWidth) {
-        decimals -= itemWidth;
-    }
-    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth , 0) animated:YES];
-}
-
+// MARK: UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:numberOfItemsInSection:)]) {
         self.originalItems = [self.delegate bannerView:collectionView numberOfItemsInSection:section];
@@ -129,12 +130,14 @@
     return nil;
 }
 
+// MARK: UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:didSelectItemAtIndex:)]) {
         [self.delegate bannerView:collectionView didSelectItemAtIndex:indexPath.item % self.originalItems];
     }
 }
 
+// MARK: UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.collectionView) {
         UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
@@ -142,37 +145,66 @@
         CGFloat itemWidth = flowLayout.itemSize.width;
         self.countPage = (offsetX + itemWidth * .5) / itemWidth;
         if (self.originalItems != 0) {
-            self.pageControl.currentPage = self.countPage % self.originalItems;
-            if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:)]) {
-                [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems];
+            if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
+                self.currentPage = self.countPage % self.originalItems;
+                self.pageControl.currentPage = self.currentPage;
+                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:)]) {
+                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems];
+                }
             }
         }
     }
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {///开始手动滑动
+    if (scrollView == self.collectionView) {
+        [self stopTimer];
+    }
+}
+
+/// ScrollView停止滚动动画
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (scrollView == self.collectionView) {
-        [self scrollViewDidEndDecelerating:scrollView];
+        [self scrollViewDidEndScroll];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (!decelerate) {
+        // 停止类型3
+        BOOL stop = scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
+        if (stop) {
+            [self scrollViewDidEndScroll];
+        }
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (scrollView == self.collectionView) {
-        CGFloat offsetX = scrollView.contentOffset.x;
-        CGFloat itemWidth = self.collectionView.bounds.size.width;
-        NSInteger page = offsetX / self.bounds.size.width;
-        if (self.shouldInfiniteShuffling) {
-            NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
-            if (page == 0) {
-                self.collectionView.contentOffset = CGPointMake(offsetX + self.originalItems * itemWidth * kSeed, 0);
-            } else if (page == cellCount - 1) {
-                self.collectionView.contentOffset = CGPointMake(offsetX - self.originalItems * itemWidth * kSeed, 0);
-            }
-        }
+    // 停止类型1、停止类型2
+    BOOL stop = !scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
+    if (stop) {
+        [self scrollViewDidEndScroll];
     }
 }
 
+/// MARK: scrollView停止滚动
+- (void)scrollViewDidEndScroll {
+    CGFloat offsetX = self.collectionView.contentOffset.x;
+    CGFloat itemWidth = self.collectionView.bounds.size.width;
+    NSInteger page = offsetX / self.bounds.size.width;
+    if (self.shouldInfiniteShuffling) {
+        NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
+        if (page == 0) {
+            self.collectionView.contentOffset = CGPointMake(offsetX + self.originalItems * itemWidth * kSeed, 0);
+        } else if (page == cellCount - 1) {
+            self.collectionView.contentOffset = CGPointMake(offsetX - self.originalItems * itemWidth * kSeed, 0);
+        }
+    }
+    [self startTimer];
+}
+
 - (void)reloadData {
+    self.currentPage = -1;
     [self.collectionView reloadData];
     if (self.shouldInfiniteShuffling) {
         [self.collectionView layoutIfNeeded];
@@ -181,32 +213,43 @@
     } else {
         self.collectionView.contentOffset = CGPointMake(0, 0);
     }
-    [self invalidateTimer];
+    [self stopTimer];
+    [self startTimer];
+}
+
+// MARK: Timer
+- (void)startTimer {
     if (self.shouldAutoScroll) {
-        [self buildTimer];
+        if (!self.timer) {
+            self.timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        }
     }
 }
 
-- (void)buildTimer {
-    if (!self.timer) {
-        self.timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-    }
-}
-
-- (void)invalidateTimer {
+- (void)stopTimer {
     if (self.timer) {
         [self.timer invalidate];
         self.timer = nil;
     }
 }
 
-- (void)applicationDidBecomeActive {
-    [self invalidateTimer];
-    if (self.shouldAutoScroll) {
-        [self buildTimer];
+- (void)updateTimer {
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    CGFloat itemWidth = flowLayout.itemSize.width;
+    CGPoint contentOffset = self.collectionView.contentOffset;
+    CGFloat decimals = contentOffset.x - self.countPage * itemWidth;
+    while (decimals > itemWidth) {
+        decimals -= itemWidth;
     }
+    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth , 0) animated:YES];
 }
+
+/// MARK: lifeCycle
+//- (void)applicationDidBecomeActive:(NSNotification *)notification {
+//    [self invalidateTimer];
+//    [self startTimer];
+//}
 
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
 
@@ -227,8 +270,8 @@
 
 - (void)removeFromSuperview {
     [super removeFromSuperview];
-    [self invalidateTimer];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [self stopTimer];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }

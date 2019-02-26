@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +18,22 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    UITabBarController *tabbarController = [[UITabBarController alloc] init];
+    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:0]];
+    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:1]];
+    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:2]];
+    self.window.rootViewController = tabbarController;
+    [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (UIViewController *)creatControllerWithNavViewControllerWithIndex:(NSInteger)index {
+    ViewController *vc = [[ViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    vc.title = [NSString stringWithFormat:@"%@", @(index)];
+    return nav;
 }
 
 

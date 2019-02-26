@@ -55,6 +55,21 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 方法去计算停止位置
 ```
 
+**6.设置页面时消失停止Timer与页面出现时开始Timer**
+
+```
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@" ,@(self.navigationController.viewControllers.count)];
+    [self.bannerView startTimer];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.bannerView stopTimer];
+}
+```
+
 
 ## 安装
 
@@ -70,6 +85,7 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 |版本|更新内容|
 |:--|:--|
-|0.0.1|内置一个默认FlowLayout样式.支持自定义FlowLayout.|
-|0.0.2|改了点注释,内容基本没改动|
+|0.0.4|改动了page滚动的代理,将Timer有关的两个方法抛在.h中,内部Timer的启动停止优化|
 |0.0.3|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|
+|0.0.2|改了点注释,内容基本没改动|
+|0.0.1|内置一个默认FlowLayout样式.支持自定义FlowLayout.|

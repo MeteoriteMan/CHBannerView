@@ -29,6 +29,8 @@
 /// 初始化创建方法.
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout;
 
+@property (nonatomic ,assign) id <CHBannerViewDelegate> delegate;
+
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 /// 是否允许自动滚动,默认为YES
@@ -42,9 +44,13 @@
 
 @property (nonatomic ,strong) CHPageControl *pageControl;
 
-@property (nonatomic ,assign) id <CHBannerViewDelegate> delegate;
-
 /// 刷新数据
 - (void)reloadData;
+
+/// 开始Timer(内部判断了是否允许滚动)
+- (void)startTimer;
+
+/// 停止Timer
+- (void)stopTimer;
 
 @end
