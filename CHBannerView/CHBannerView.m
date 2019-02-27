@@ -25,27 +25,11 @@
 /// 当前page,记录page位置,-1为初始化状态
 @property (nonatomic ,assign) NSInteger currentPage;
 
+@property (nonatomic ,assign) NSUInteger changeStatusBarPage;
+
 @end
 
-@implementation CHBannerView {
-    CGFloat _timeInterval;
-}
-
-/// MARK: setter
-- (void)setShouldAutoScroll:(BOOL)shouldAutoScroll {
-    _shouldAutoScroll = shouldAutoScroll;
-    if (shouldAutoScroll) {
-        [self startTimer];
-    } else {
-        [self stopTimer];
-    }
-}
-
-- (void)setTimeInterval:(CGFloat)timeInterval {
-    _timeInterval = timeInterval;
-    [self stopTimer];
-    [self startTimer];
-}
+@implementation CHBannerView
 
 /// MARK: getter
 - (CGFloat)timeInterval {
@@ -159,6 +143,11 @@
                 }
             }
         }
+        if (self.shouldInfiniteShuffling == NO) {
+            if (self.originalItems - 1 >= self.currentPage) {//最后一页
+                [self stopTimer];
+            }
+        }
     }
 }
 
@@ -193,7 +182,7 @@
     }
 }
 
-/// MARK: scrollView停止滚动
+/// MARK: scrollView停止滚动(user.是否是用户操作的)
 - (void)scrollViewDidEndScroll {
     CGFloat offsetX = self.collectionView.contentOffset.x;
     CGFloat itemWidth = self.collectionView.bounds.size.width;
@@ -212,25 +201,43 @@
 - (void)reloadData {
     self.currentPage = -1;
     [self.collectionView reloadData];
+    [self.collectionView layoutIfNeeded];
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    CGFloat width = flowLayout.itemSize.width;
+    NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:(self.originalItems - 1);
+    CGFloat computeWidth = width * compute;
     if (self.shouldInfiniteShuffling) {
-        [self.collectionView layoutIfNeeded];
-        UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5, 0);
+        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
     } else {
-        self.collectionView.contentOffset = CGPointMake(0, 0);
+        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
-    [self stopTimer];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
+        [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.originalItems==0?-1:self.defaultSelectItem numberOfPages:self.originalItems];
+    }
     [self startTimer];
 }
 
 // MARK: Timer
 - (void)startTimer {
     if (self.shouldAutoScroll) {
-        if (!self.timer) {
-            self.timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];
-            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        if (self.shouldInfiniteShuffling == YES) {
+            if (self.originalItems != 0) {
+                [self buildTimer];
+            }
+        } else {
+            if (self.originalItems - 1 > (self.currentPage!=-1?self.currentPage:0)) {
+                [self buildTimer];
+            }
         }
     }
+}
+
+- (void)buildTimer {
+    if (self.timer) {
+        [self stopTimer];
+    }
+    self.timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 
 - (void)stopTimer {
@@ -252,20 +259,29 @@
 }
 
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
-
+    self.changeStatusBarPage = self.currentPage<0?0:self.currentPage;
 }
 
 - (void)applicationDidChangeStatusBarOrientationNotification:(NSNotification *)notification {
+    [self.collectionView reloadData];
     [self layoutIfNeeded];
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    [self.collectionView scrollRectToVisible:CGRectMake(flowLayout.itemSize.width * self.countPage, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height) animated:NO];
-    CGFloat itemWidth = flowLayout.itemSize.width;
-    CGPoint contentOffset = self.collectionView.contentOffset;
-    CGFloat decimals = contentOffset.x - self.countPage * itemWidth;
-    while (decimals > itemWidth) {
-        decimals -= itemWidth;
+    CGFloat width = flowLayout.itemSize.width;
+    CGFloat computeWidth = width * self.changeStatusBarPage;
+    if (self.shouldInfiniteShuffling) {
+        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
+    } else {
+        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
-    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals , 0) animated:NO];
+//    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+//    [self.collectionView scrollRectToVisible:CGRectMake(flowLayout.itemSize.width * self.changeStatusBarPage, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height) animated:NO];
+//    CGFloat itemWidth = flowLayout.itemSize.width;
+//    CGPoint contentOffset = self.collectionView.contentOffset;
+//    CGFloat decimals = contentOffset.x - self.changeStatusBarPage * itemWidth;
+//    while (decimals > itemWidth) {
+//        decimals -= itemWidth;
+//    }
+//    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals , 0) animated:NO];
 }
 
 - (void)removeFromSuperview {

@@ -64,4 +64,14 @@
     return YES;
 }
 
+- (CGSize)collectionViewContentSize {
+    CGSize contentSize = [super collectionViewContentSize];
+    NSLog(@"contentSize.width:%lf",contentSize.width);
+    NSLog(@"self.collectionView.bounds.size.width:%lf",self.collectionView.bounds.size.width);
+    if (contentSize.width <= self.collectionView.bounds.size.width) {
+        contentSize.width = self.collectionView.bounds.size.width + 1;
+    }
+    return contentSize;
+}
+
 @end

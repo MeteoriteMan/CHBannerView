@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import <Masonry.h>
-#import "CHBannerView.h"
+#import "CHBannerViewHeader.h"
 #import "CHBannerCollectionViewCell.h"
 #import "CollectionViewFlowLayout.h"
 #import "CHBannerCollectionViewFlowLayout.h"
@@ -26,7 +26,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@" ,@(self.navigationController.viewControllers.count)];
+//    self.navigationItem.title = [NSString stringWithFormat:@"%@" ,@(self.navigationController.viewControllers.count)];
     [self.bannerView startTimer];
 }
 
@@ -50,6 +50,7 @@
     self.bannerView.pageControl.interval = 5;
 //    self.bannerView.shouldAutoScroll = NO;
 //    self.bannerView.shouldInfiniteShuffling = NO;
+//    self.bannerView.defaultSelectItem = 1;
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
@@ -59,7 +60,7 @@
     }];
 
     NSMutableArray *arrayM = [NSMutableArray array];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
         [arrayM addObject:[[NSObject alloc] init]];
     }
     self.bannerModelArray = arrayM.copy;
@@ -87,19 +88,22 @@
 - (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages {
     NSLog(@"滚动到第%ld页,总共有%ld页",index ,numberOfPages);
 //    NSLog(@"%@",collectionView);
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, numberOfPages];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    ViewController *vc = [[ViewController alloc] init];
-//    [self.navigationController pushViewController:vc animated:YES];
-
-    NSInteger count = arc4random_uniform(4);
-    NSMutableArray *arrayM = [NSMutableArray array];
-    for (int i = 0; i < count; i++) {
-        [arrayM addObject:[[NSObject alloc] init]];
-    }
-    self.bannerModelArray = arrayM.copy;
-    [self.bannerView reloadData];
+//    if (arc4random_uniform(2)) {
+        ViewController *vc = [[ViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+//    } else {
+//        NSInteger count = arc4random_uniform(4);
+//        NSMutableArray *arrayM = [NSMutableArray array];
+//        for (int i = 0; i < count; i++) {
+//            [arrayM addObject:[[NSObject alloc] init]];
+//        }
+//        self.bannerModelArray = arrayM.copy;
+//        [self.bannerView reloadData];
+//    }
 }
 
 @end

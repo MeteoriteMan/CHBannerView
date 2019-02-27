@@ -42,6 +42,9 @@
 /// 滚动时间间距
 @property (nonatomic ,assign) CGFloat timeInterval;
 
+/// 初始选中Item(默认是第一个:0)
+@property (nonatomic ,assign) NSUInteger defaultSelectItem;
+
 @property (nonatomic ,strong) CHPageControl *pageControl;
 
 /// 刷新数据

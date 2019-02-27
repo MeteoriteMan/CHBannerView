@@ -27,6 +27,7 @@
 		430AD61A21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		430AD61B21E30FAB00C2BF36 /* CHBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerView.h; sourceTree = "<group>"; };
 		430AD61C21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		431E9BFD222653F200BB1404 /* CHBannerViewHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerViewHeader.h; sourceTree = "<group>"; };
 		431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout3DStyle.h; sourceTree = "<group>"; };
 		431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout3DStyle.m; sourceTree = "<group>"; };
 		432AE02E21DF237700848863 /* CHBannerView-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CHBannerView-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +71,7 @@
 		430AD61821E30FAB00C2BF36 /* CHBannerView */ = {
 			isa = PBXGroup;
 			children = (
+				431E9BFD222653F200BB1404 /* CHBannerViewHeader.h */,
 				430AD61B21E30FAB00C2BF36 /* CHBannerView.h */,
 				430AD61921E30FAB00C2BF36 /* CHBannerView.m */,
 				430AD61A21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.h */,
