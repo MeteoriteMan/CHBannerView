@@ -85,6 +85,7 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 |版本|更新内容|
 |:--|:--|
+|0.0.5|去掉示例FlowLayout中的NSLog打印|
 |0.0.4|改动了page滚动的代理,将Timer有关的两个方法抛在.h中,内部Timer的启动停止优化.重写了非无限循环图片.不开启轮播的逻辑|
 |0.0.3|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|
 |0.0.2|改了点注释,内容基本没改动|
