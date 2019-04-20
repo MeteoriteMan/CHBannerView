@@ -36,12 +36,21 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 4.属性
 
 ```
+// MARK: 轮播图有关
 /// 是否允许自动滚动,默认为YES
 @property (nonatomic ,assign) BOOL shouldAutoScroll;
+
+/// 在数据源个数为1的时候是否停止自动滚动,默认为NO
+@property (nonatomic ,assign) BOOL stopAutoScrollInSingleItem;
 
 /// 是否无限轮播,默认为YES
 @property (nonatomic ,assign) BOOL shouldInfiniteShuffling;
 
+/// 在个数为1的时候取消无限轮播,默认为NO
+@property (nonatomic ,assign) BOOL cancelInfiniteShufflingInSingleItem;
+
+
+/// 自带PageControl有关(详情请参阅CHPageControl.自定义的话可以隐藏这个控件)
 /// 滚动时间间距.默认为5s
 @property (nonatomic ,assign) CGFloat timeInterval;
 
@@ -85,6 +94,7 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 |版本|更新内容|
 |:--|:--|
+|0.0.6|新增两个方便的属性: stopAutoScrollInSingleItem与cancelInfiniteShufflingInSingleItem |
 |0.0.5|去掉示例FlowLayout中的NSLog打印|
 |0.0.4|改动了page滚动的代理,将Timer有关的两个方法抛在.h中,内部Timer的启动停止优化.重写了非无限循环图片.不开启轮播的逻辑|
 |0.0.3|新增滚动到page的代理.方便自定义pageControl时绑定currentPage|

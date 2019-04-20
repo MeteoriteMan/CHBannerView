@@ -36,8 +36,14 @@
 /// 是否允许自动滚动,默认为YES
 @property (nonatomic ,assign) BOOL shouldAutoScroll;
 
+/// 在数据源个数为1的时候是否停止自动滚动,默认为NO
+@property (nonatomic ,assign) BOOL stopAutoScrollInSingleItem;
+
 /// 是否无限轮播,默认为YES
 @property (nonatomic ,assign) BOOL shouldInfiniteShuffling;
+
+/// 在个数为1的时候取消无限轮播,默认为NO
+@property (nonatomic ,assign) BOOL cancelInfiniteShufflingInSingleItem;
 
 /// 滚动时间间距
 @property (nonatomic ,assign) CGFloat timeInterval;

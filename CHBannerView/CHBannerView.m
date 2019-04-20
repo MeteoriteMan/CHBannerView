@@ -9,7 +9,7 @@
 #import "CHBannerView.h"
 #import "CHBannerCollectionViewFlowLayout.h"
 
-#define kSeed (self.shouldInfiniteShuffling?1000:1)
+#define kSeed ([self shouldInfiniteShuffling]?1000:1)
 
 @interface CHBannerView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -143,7 +143,7 @@
                 }
             }
         }
-        if (self.shouldInfiniteShuffling == NO) {
+        if (![self shouldInfiniteShuffling]) {
             if (self.originalItems - 1 >= self.currentPage) {//最后一页
                 [self stopTimer];
             }
@@ -187,7 +187,7 @@
     CGFloat offsetX = self.collectionView.contentOffset.x;
     CGFloat itemWidth = self.collectionView.bounds.size.width;
     NSInteger page = offsetX / self.bounds.size.width;
-    if (self.shouldInfiniteShuffling) {
+    if ([self shouldInfiniteShuffling]) {
         NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
         if (page == 0) {
             self.collectionView.contentOffset = CGPointMake(offsetX + self.originalItems * itemWidth * kSeed, 0);
@@ -200,13 +200,14 @@
 
 - (void)reloadData {
     self.currentPage = -1;
+    [self stopTimer];
     [self.collectionView reloadData];
     [self.collectionView layoutIfNeeded];
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     CGFloat width = flowLayout.itemSize.width;
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:(self.originalItems - 1);
     CGFloat computeWidth = width * compute;
-    if (self.shouldInfiniteShuffling) {
+    if ([self shouldInfiniteShuffling]) {
         self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
     } else {
         self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
@@ -219,14 +220,18 @@
 
 // MARK: Timer
 - (void)startTimer {
-    if (self.shouldAutoScroll) {
-        if (self.shouldInfiniteShuffling == YES) {
+    if ([self shouldAutoScroll]) {
+        if ([self shouldInfiniteShuffling]) {
             if (self.originalItems != 0) {
-                [self buildTimer];
+                if ([self shouldAutoScroll]) {
+                    [self buildTimer];
+                }
             }
         } else {
             if (self.originalItems - 1 > (self.currentPage!=-1?self.currentPage:0)) {
-                [self buildTimer];
+                if ([self shouldAutoScroll]) {
+                    [self buildTimer];
+                }
             }
         }
     }
@@ -268,20 +273,29 @@
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     CGFloat width = flowLayout.itemSize.width;
     CGFloat computeWidth = width * self.changeStatusBarPage;
-    if (self.shouldInfiniteShuffling) {
+    if ([self shouldInfiniteShuffling]) {
         self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
     } else {
         self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
-//    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-//    [self.collectionView scrollRectToVisible:CGRectMake(flowLayout.itemSize.width * self.changeStatusBarPage, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height) animated:NO];
-//    CGFloat itemWidth = flowLayout.itemSize.width;
-//    CGPoint contentOffset = self.collectionView.contentOffset;
-//    CGFloat decimals = contentOffset.x - self.changeStatusBarPage * itemWidth;
-//    while (decimals > itemWidth) {
-//        decimals -= itemWidth;
-//    }
-//    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals , 0) animated:NO];
+}
+
+/// 是否允许自动滚动
+- (BOOL)shouldAutoScroll {
+    if (self.originalItems == 1 && self.stopAutoScrollInSingleItem) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+/// 是否允许无限轮播
+- (BOOL)shouldInfiniteShuffling {
+    if (self.originalItems == 1 && self.cancelInfiniteShufflingInSingleItem) {
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 - (void)removeFromSuperview {
