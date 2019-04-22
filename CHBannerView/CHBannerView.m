@@ -27,6 +27,8 @@
 
 @property (nonatomic ,assign) NSUInteger changeStatusBarPage;
 
+@property (nonatomic ,assign) BOOL needsReload;
+
 @end
 
 @implementation CHBannerView
@@ -86,7 +88,7 @@
                                        [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-4],
                                        [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:0 constant:4]
                                        ]];
-
+    [self setNeedsReload];
 }
 
 // MARK: UICollectionViewDataSource
@@ -216,6 +218,19 @@
         [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.originalItems==0?-1:self.defaultSelectItem numberOfPages:self.originalItems];
     }
     [self startTimer];
+    self.needsReload = NO;
+}
+
+/// 刷新数据
+- (void)reloadDataIfNeeded {
+    if (self.needsReload) {
+        [self reloadData];
+    }
+}
+
+- (void)setNeedsReload {
+    self.needsReload = YES;
+    [self setNeedsLayout];
 }
 
 // MARK: Timer

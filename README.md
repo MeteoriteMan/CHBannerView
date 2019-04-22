@@ -92,8 +92,11 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 ## 更新记录
 
+**更新预告:准备在0.0.8版本中简化代码.以及未来版本中移除PageControl.以及对minimumLineSpacing的支持**
+
 |版本|更新内容|
 |:--|:--|
+|0.0.7|修复在Cell内进行布局的CHBannerView的布局错误|
 |0.0.6|新增两个方便的属性: stopAutoScrollInSingleItem与cancelInfiniteShufflingInSingleItem |
 |0.0.5|去掉示例FlowLayout中的NSLog打印|
 |0.0.4|改动了page滚动的代理,将Timer有关的两个方法抛在.h中,内部Timer的启动停止优化.重写了非无限循环图片.不开启轮播的逻辑|
