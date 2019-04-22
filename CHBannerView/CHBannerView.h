@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CHPageControl/CHPageControl.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class CHBannerView;
 
 @protocol CHBannerViewDataSource <NSObject>
@@ -78,3 +80,5 @@
 - (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END
