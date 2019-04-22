@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
 
-- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
+- (UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 
 @end
 
