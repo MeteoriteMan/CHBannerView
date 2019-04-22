@@ -10,17 +10,22 @@
 #import <CHPageControl/CHPageControl.h>
 
 @class CHBannerView;
-@protocol CHBannerViewDelegate <NSObject>
+
+@protocol CHBannerViewDataSource <NSObject>
 
 @required
-- (NSInteger)bannerView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *)bannerView;
 
-- (UICollectionViewCell *)bannerView:(UICollectionView *)collectionView cellForItemAtIndex:(NSInteger)index;
+- (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index;
+
+@end
+
+@protocol CHBannerViewDelegate <NSObject>
 
 @optional
-- (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index;
+- (void)bannerView:(CHBannerView *)bannerView didSelectItemAtIndex:(NSInteger)index;
 
-- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
+- (void)bannerView:(CHBannerView *)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
 
 @end
 
@@ -28,6 +33,8 @@
 
 /// 初始化创建方法.
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout;
+
+@property (nonatomic ,assign) id <CHBannerViewDataSource> dataSource;
 
 @property (nonatomic ,assign) id <CHBannerViewDelegate> delegate;
 
@@ -61,5 +68,13 @@
 
 /// 停止Timer
 - (void)stopTimer;
+
+
+// MARK:注册/获取单元格
+- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
+
+- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
+
+- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 
 @end

@@ -96,7 +96,8 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 |版本|更新内容|
 |:--|:--|
-|0.0.7|修复在Cell内进行布局的CHBannerView的布局错误|
+|0.0.8|将Delegate分为DataSource与Delegate.代理方法重写.修复0.0.7版本中丢失的区块(纯手欠...)|
+|0.0.7|修复在Cell内进行布局的CHBannerView的布局错误(手欠把区块删了,这个版本基本上等于没改动)|
 |0.0.6|新增两个方便的属性: stopAutoScrollInSingleItem与cancelInfiniteShufflingInSingleItem |
 |0.0.5|去掉示例FlowLayout中的NSLog打印|
 |0.0.4|改动了page滚动的代理,将Timer有关的两个方法抛在.h中,内部Timer的启动停止优化.重写了非无限循环图片.不开启轮播的逻辑|

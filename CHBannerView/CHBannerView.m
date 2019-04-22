@@ -93,10 +93,10 @@
 
 // MARK: UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:numberOfItemsInSection:)]) {
-        self.originalItems = [self.delegate bannerView:collectionView numberOfItemsInSection:section];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfSectionsInBannerView:)]) {
+        self.originalItems = [self.dataSource numberOfSectionsInBannerView:self];
         self.pageControl.numberOfPages = self.originalItems;
-        return [self.delegate bannerView:collectionView numberOfItemsInSection:section] * kSeed;
+        return [self.dataSource numberOfSectionsInBannerView:self] * kSeed;
     } else {
         return 0;
     }
@@ -107,8 +107,8 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:cellForItemAtIndex:)]) {
-        return [self.delegate bannerView:collectionView cellForItemAtIndex:indexPath.item % self.originalItems];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(bannerView:cellForItemAtIndex:)]) {
+        return [self.dataSource bannerView:self cellForItemAtIndex:indexPath.item % self.originalItems];
     }
     NSAssert(YES, @"没有注册单元格");
     return nil;
@@ -117,7 +117,7 @@
 // MARK: UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:didSelectItemAtIndex:)]) {
-        [self.delegate bannerView:collectionView didSelectItemAtIndex:indexPath.item % self.originalItems];
+        [self.delegate bannerView:self didSelectItemAtIndex:indexPath.item % self.originalItems];
     }
 }
 
@@ -133,7 +133,7 @@
                 self.currentPage = self.countPage % self.originalItems;
                 self.pageControl.currentPage = self.currentPage;
                 if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
+                    [self.delegate bannerView:self scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
                 }
             }
         } else {//originalItems == 0
@@ -141,7 +141,7 @@
                 self.currentPage = 0;
                 self.pageControl.currentPage = self.currentPage;
                 if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-                    [self.delegate bannerView:self.collectionView scrollToItemAtIndex:0 numberOfPages:0];
+                    [self.delegate bannerView:self scrollToItemAtIndex:0 numberOfPages:0];
                 }
             }
         }
@@ -215,7 +215,7 @@
         self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-        [self.delegate bannerView:self.collectionView scrollToItemAtIndex:self.originalItems==0?-1:self.defaultSelectItem numberOfPages:self.originalItems];
+        [self.delegate bannerView:self scrollToItemAtIndex:self.originalItems==0?-1:self.defaultSelectItem numberOfPages:self.originalItems];
     }
     [self startTimer];
     self.needsReload = NO;
@@ -231,6 +231,11 @@
 - (void)setNeedsReload {
     self.needsReload = YES;
     [self setNeedsLayout];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self reloadDataIfNeeded];
 }
 
 // MARK: Timer
@@ -319,5 +324,19 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
+
+// MARK:注册/获取单元格
+- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier {
+    [self.collectionView registerClass:cellClass forCellWithReuseIdentifier:identifier];
+}
+
+- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier {
+    [self.collectionView registerNib:nib forCellWithReuseIdentifier:identifier];
+}
+
+- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index {
+    return [self.collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
+
 
 @end
