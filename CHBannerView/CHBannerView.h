@@ -73,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 // MARK:注册/获取单元格
-- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
+- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
 
-- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
+- (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
 
 - (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 

@@ -326,11 +326,11 @@
 }
 
 // MARK:注册/获取单元格
-- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier {
+- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier {
     [self.collectionView registerClass:cellClass forCellWithReuseIdentifier:identifier];
 }
 
-- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier {
+- (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier {
     [self.collectionView registerNib:nib forCellWithReuseIdentifier:identifier];
 }
 
