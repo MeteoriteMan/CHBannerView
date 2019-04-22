@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <CHPageControl/CHPageControl.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @class CHBannerView;
 
 @protocol CHBannerViewDataSource <NSObject>
@@ -77,8 +75,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
 
-- (UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
+- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 
 @end
-
-NS_ASSUME_NONNULL_END
