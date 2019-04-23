@@ -92,11 +92,11 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 ## 更新记录
 
-**更新预告:准备在0.0.8版本中简化代码.以及未来版本中移除PageControl.以及对minimumLineSpacing的支持**
+**更新预告:准备在0.1.0版本中简化代码.以及未来版本中移除PageControl.以及对minimumLineSpacing的支持**
 
 |版本|更新内容|
 |:--|:--|
-|0.0.8|将Delegate分为DataSource与Delegate.代理方法重写.修复0.0.7版本中丢失的区块(纯手欠...)|
+|0.1.0|将Delegate分为DataSource与Delegate.代理方法重写.修复0.0.7版本中丢失的区块(纯手欠...)|
 |0.0.7|修复在Cell内进行布局的CHBannerView的布局错误(手欠把区块删了,这个版本基本上等于没改动)|
 |0.0.6|新增两个方便的属性: stopAutoScrollInSingleItem与cancelInfiniteShufflingInSingleItem |
 |0.0.5|去掉示例FlowLayout中的NSLog打印|
