@@ -14,25 +14,25 @@
 @protocol CHBannerViewDataSource <NSObject>
 
 @required
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView  * _Nonnull)bannerView;
+- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
-- (UICollectionViewCell * _Nonnull)bannerView:(CHBannerView * _Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
+- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
 
 @end
 
 @protocol CHBannerViewDelegate <NSObject>
 
 @optional
-- (void)bannerView:(CHBannerView * _Nonnull)bannerView didSelectItemAtIndex:(NSInteger)index;
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView didSelectItemAtIndex:(NSInteger)index;
 
-- (void)bannerView:(CHBannerView * _Nonnull)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
 
 @end
 
 @interface CHBannerView : UIView
 
 /// 初始化创建方法.
-- (nonnull instancetype)initWithCollectionViewLayout:(UICollectionViewLayout * _Nullable)collectionViewLayout;
+- (instancetype _Nonnull)initWithCollectionViewLayout:(UICollectionViewLayout * _Nullable)collectionViewLayout;
 
 @property (nonatomic ,assign ,nullable) id <CHBannerViewDataSource> dataSource;
 
@@ -70,10 +70,10 @@
 - (void)stopTimer;
 
 // MARK:注册/获取单元格
-- (void)registerClass:(Class _Nullable)cellClass forCellWithReuseIdentifier:(NSString * _Nonnull)identifier;
+- (void)registerClass:(Class _Nullable)cellClass forCellWithReuseIdentifier:(NSString *_Nonnull)identifier;
 
-- (void)registerNib:(UINib * _Nullable)nib forCellWithReuseIdentifier:(NSString * _Nonnull)identifier;
+- (void)registerNib:(UINib *_Nullable)nib forCellWithReuseIdentifier:(NSString *_Nonnull)identifier;
 
-- (nullable __kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString * _Nonnull)identifier forIndex:(NSInteger)index;
+- (__kindof UICollectionViewCell *_Nonnull)dequeueReusableCellWithReuseIdentifier:(NSString *_Nonnull)identifier forIndex:(NSInteger)index;
 
 @end
