@@ -15,9 +15,10 @@
     CGFloat height = self.collectionView.bounds.size.height;
     CGFloat width = height * 16.0 / 9.0;
     self.itemSize = CGSizeMake(width, height);
-    self.minimumLineSpacing = 0;
+    self.minimumLineSpacing = 20;
     self.minimumInteritemSpacing = 0;
-    CGFloat headerFooterInterval = (self.collectionView.bounds.size.width - width) / 2.0;
+    CGFloat headerFooterInterval = 0;
+//    (self.collectionView.bounds.size.width - width) / 2.0;
     self.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
     self.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;

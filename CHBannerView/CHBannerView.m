@@ -127,7 +127,7 @@
         UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
         CGFloat offsetX = scrollView.contentOffset.x;
         CGFloat itemWidth = flowLayout.itemSize.width;
-        self.countPage = (offsetX + itemWidth * .5) / itemWidth;
+        self.countPage = (offsetX + (itemWidth + flowLayout.minimumLineSpacing) * .5) / (itemWidth + flowLayout.minimumLineSpacing);
         if (self.originalItems != 0) {
             if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
                 self.currentPage = self.countPage % self.originalItems;
@@ -208,9 +208,9 @@
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     CGFloat width = flowLayout.itemSize.width;
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:(self.originalItems - 1);
-    CGFloat computeWidth = width * compute;
+    CGFloat computeWidth = width * compute + (compute - 1)>0?(compute - 1) * flowLayout.minimumLineSpacing:0;
     if ([self shouldInfiniteShuffling]) {
-        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
+        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (kSeed * .5 - 1) * flowLayout.minimumLineSpacing, 0);
     } else {
         self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
@@ -276,11 +276,12 @@
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     CGFloat itemWidth = flowLayout.itemSize.width;
     CGPoint contentOffset = self.collectionView.contentOffset;
-    CGFloat decimals = contentOffset.x - self.countPage * itemWidth;
-    while (decimals > itemWidth) {
+    CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * flowLayout.minimumLineSpacing;
+    while (decimals > itemWidth + flowLayout.minimumLineSpacing) {
         decimals -= itemWidth;
+        decimals -= flowLayout.minimumLineSpacing;
     }
-    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth , 0) animated:YES];
+    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + flowLayout.minimumLineSpacing, 0) animated:YES];
 }
 
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
