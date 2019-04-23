@@ -61,7 +61,7 @@
 //        attr.transform = transform;
 
         CGFloat angle = - (margin/screenW * M_PI_2);
-        CGFloat scale = 1 - ABS(margin)/screenW;
+//        CGFloat scale = 1 - ABS(margin)/screenW;
 //        CATransform3D transform3D = CATransform3DIdentity;
         CATransform3D transform3D = attr.transform3D;
 //        CATransform3DRotate(<#CATransform3D t#>, <#CGFloat angle#>, <#CGFloat x#>, <#CGFloat y#>, <#CGFloat z#>)
