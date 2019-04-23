@@ -14,31 +14,31 @@
 @protocol CHBannerViewDataSource <NSObject>
 
 @required
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *)bannerView;
+- (NSInteger)numberOfSectionsInBannerView:(nonnull CHBannerView *)bannerView;
 
-- (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index;
+- (nonnull UICollectionViewCell *)bannerView:(nonnull CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index;
 
 @end
 
 @protocol CHBannerViewDelegate <NSObject>
 
 @optional
-- (void)bannerView:(CHBannerView *)bannerView didSelectItemAtIndex:(NSInteger)index;
+- (void)bannerView:(nonnull CHBannerView *)bannerView didSelectItemAtIndex:(NSInteger)index;
 
-- (void)bannerView:(CHBannerView *)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
+- (void)bannerView:(nonnull CHBannerView *)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
 
 @end
 
 @interface CHBannerView : UIView
 
 /// 初始化创建方法.
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout;
+- (nonnull instancetype)initWithCollectionViewLayout:(nullable UICollectionViewLayout *)collectionViewLayout;
 
-@property (nonatomic ,assign) id <CHBannerViewDataSource> dataSource;
+@property (nonatomic ,assign ,nullable) id <CHBannerViewDataSource> dataSource;
 
-@property (nonatomic ,assign) id <CHBannerViewDelegate> delegate;
+@property (nonatomic ,assign ,nullable) id <CHBannerViewDelegate> delegate;
 
-@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong ,nullable) UICollectionView *collectionView;
 
 /// 是否允许自动滚动,默认为YES
 @property (nonatomic ,assign) BOOL shouldAutoScroll;
@@ -58,7 +58,7 @@
 /// 初始选中Item(默认是第一个:0)
 @property (nonatomic ,assign) NSUInteger defaultSelectItem;
 
-@property (nonatomic ,strong) CHPageControl *pageControl;
+@property (nonatomic ,strong ,nullable) CHPageControl *pageControl;
 
 /// 刷新数据
 - (void)reloadData;
@@ -69,12 +69,11 @@
 /// 停止Timer
 - (void)stopTimer;
 
-
 // MARK:注册/获取单元格
-- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
+- (void)registerClass:(nullable Class)cellClass forCellWithReuseIdentifier:(nonnull NSString *)identifier;
 
-- (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
+- (void)registerNib:(nullable UINib *)nib forCellWithReuseIdentifier:(nonnull NSString *)identifier;
 
-- (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
+- (nullable __kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(nonnull NSString *)identifier forIndex:(NSInteger)index;
 
 @end
