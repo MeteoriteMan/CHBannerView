@@ -13,27 +13,38 @@
 self.automaticallyAdjustsScrollViewInsets = NO;
 ```
 
-1.遵循`<CHBannerViewDelegate>`代理
+**1.遵循`<CHBannerViewDataSource>`以及`<CHBannerViewDelegate>`代理**
 
-2.UI展示实现
+**2.UI展示实现:**`<CHBannerViewDataSource> `
 
 ```
-- (NSInteger)bannerView:(CHBannerView *)bannerView numberOfItemsInSection:(NSInteger)section;
+- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
-- (UICollectionViewCell *)bannerView:(UICollectionView *)collectionView cellForItemAtIndex:(NSInteger)index;
+- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
+
 ```
 
-3.其他代理
+注册cell
+```
+[self.bannerView registerClass:[xxx class] forCellWithReuseIdentifier:@"XXXID"];
+```
+
+"缓存池内"取Cell
+```
+xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex:index];
+```
+
+**3.其他代理:**`<CHBannerViewDelegate>`
 
 ```
 /// 点击item的代理
-- (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index;
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView didSelectItemAtIndex:(NSInteger)index;
 
-/// 滚动到某页的代理
-- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index;
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
+
 ```
 
-4.属性
+**4.属性**
 
 ```
 // MARK: 轮播图有关
@@ -92,10 +103,11 @@ self.automaticallyAdjustsScrollViewInsets = NO;
 
 ## 更新记录
 
-**更新预告:准备在0.1.0版本中简化代码.以及未来版本中移除PageControl.以及对minimumLineSpacing的支持**
+**更新预告:1.准备在未来版本中新增对垂直滑动的支持,2.准备未来版本中移除PageControl.**
 
 |版本|更新内容|
 |:--|:--|
+|0.1.1|修复上个版本无限轮播与自动滚动属性失效的BUG.新增minimumLineSpacing的支持|
 |0.1.0|将Delegate分为DataSource与Delegate.代理方法重写.修复0.0.7版本中丢失的区块(纯手欠...)|
 |0.0.7|修复在Cell内进行布局的CHBannerView的布局错误(手欠把区块删了,这个版本基本上等于没改动)|
 |0.0.6|新增两个方便的属性: stopAutoScrollInSingleItem与cancelInfiniteShufflingInSingleItem |

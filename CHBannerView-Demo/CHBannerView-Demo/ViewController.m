@@ -13,6 +13,7 @@
 #import "CollectionViewFlowLayout.h"
 #import "CHBannerCollectionViewFlowLayout.h"
 #import "CHBannerCollectionViewFlowLayout3DStyle.h"
+#import "TestMinimumLineSpacingFlowLayout.h"
 
 @interface ViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
 
@@ -44,6 +45,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
 //    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
+    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
@@ -53,7 +55,9 @@
     self.bannerView.cancelInfiniteShufflingInSingleItem = YES;
 
 //    self.bannerView.shouldAutoScroll = NO;
-//    self.bannerView.shouldInfiniteShuffling = NO;
+    self.bannerView.shouldInfiniteShuffling = NO;
+
+    
 //    self.bannerView.defaultSelectItem = 1;
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {

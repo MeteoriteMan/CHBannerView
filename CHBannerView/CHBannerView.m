@@ -210,7 +210,7 @@
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:(self.originalItems - 1);
     CGFloat computeWidth = width * compute + (compute - 1)>0?(compute - 1) * flowLayout.minimumLineSpacing:0;
     if ([self shouldInfiniteShuffling]) {
-        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (kSeed * .5 - 1) * flowLayout.minimumLineSpacing, 0);
+        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * flowLayout.minimumLineSpacing, 0);
     } else {
         self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
     }
@@ -303,6 +303,9 @@
 
 /// 是否允许自动滚动
 - (BOOL)shouldAutoScroll {
+    if (_shouldAutoScroll == NO) {
+        return NO;
+    }
     if (self.originalItems == 1 && self.stopAutoScrollInSingleItem) {
         return NO;
     } else {
@@ -312,6 +315,9 @@
 
 /// 是否允许无限轮播
 - (BOOL)shouldInfiniteShuffling {
+    if (_shouldInfiniteShuffling == NO) {
+        return NO;
+    }
     if (self.originalItems == 1 && self.cancelInfiniteShufflingInSingleItem) {
         return NO;
     } else {
