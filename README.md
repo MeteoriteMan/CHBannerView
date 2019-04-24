@@ -13,6 +13,16 @@
 self.automaticallyAdjustsScrollViewInsets = NO;
 ```
 
+cell的适配注意点.
+如果使用自动布局,比如
+```
+@property (nonatomic ,strong) CHBannerView *bannerView;
+```
+布局完成后调用需要调用
+```
+[self.bannerView reloadData];
+```
+
 **1.遵循`<CHBannerViewDataSource>`以及`<CHBannerViewDelegate>`代理**
 
 **2.UI展示实现:**`<CHBannerViewDataSource> `
