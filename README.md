@@ -18,9 +18,9 @@ cell的适配注意点.
 ```
 @property (nonatomic ,strong) CHBannerView *bannerView;
 ```
-布局完成后调用需要调用
+建议在方法中进行数据传递刷新.避免出现样式错乱(允许无限轮播的情况下,)
 ```
-[self.bannerView reloadData];
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 ```
 
 **1.遵循`<CHBannerViewDataSource>`以及`<CHBannerViewDelegate>`代理**
