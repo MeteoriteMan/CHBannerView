@@ -15,8 +15,6 @@
 
 @property (nonatomic, strong) NSTimer *timer;
 
-@property (nonatomic ,assign) BOOL isScrolling;
-
 /// 原始Item个数
 @property (nonatomic ,assign) NSInteger originalItems;
 
@@ -115,6 +113,12 @@
 }
 
 // MARK: UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:willDisplayCell:forItemAtIndex:)]) {
+        [self.delegate bannerView:self willDisplayCell:cell forItemAtIndex:indexPath.row % self.originalItems];
+    }
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:didSelectItemAtIndex:)]) {
         [self.delegate bannerView:self didSelectItemAtIndex:indexPath.item % self.originalItems];
@@ -204,11 +208,12 @@
     self.currentPage = -1;
     [self stopTimer];
     [self.collectionView reloadData];
+    [self.collectionView setNeedsLayout];
     [self.collectionView layoutIfNeeded];
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     CGFloat width = flowLayout.itemSize.width;
-    NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:(self.originalItems - 1);
-    CGFloat computeWidth = width * compute + (compute - 1)>0?(compute - 1) * flowLayout.minimumLineSpacing:0;
+    NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:0;
+    CGFloat computeWidth = width * compute + ((compute - 1)>0?(compute - 1) * flowLayout.minimumLineSpacing:0);
     if ([self shouldInfiniteShuffling]) {
         self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * flowLayout.minimumLineSpacing, 0);
     } else {

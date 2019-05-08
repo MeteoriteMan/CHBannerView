@@ -27,6 +27,8 @@
 
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
 
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
+
 @end
 
 @interface CHBannerView : UIView
@@ -38,6 +40,7 @@
 
 @property (nonatomic ,assign ,nullable) id <CHBannerViewDelegate> delegate;
 
+/// 请不要设置该属性的DataSource与Delegate
 @property (nonatomic, strong ,nullable) UICollectionView *collectionView;
 
 /// 是否允许自动滚动,默认为YES

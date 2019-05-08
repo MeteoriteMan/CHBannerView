@@ -45,17 +45,19 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
 //    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
-    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
+//    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
+    /// 设置默认选中Item
+    self.bannerView.defaultSelectItem = 2;
     self.bannerView.pageControl.interval = 5;
     self.bannerView.stopAutoScrollInSingleItem = YES;
     self.bannerView.cancelInfiniteShufflingInSingleItem = YES;
 
 //    self.bannerView.shouldAutoScroll = NO;
-    self.bannerView.shouldInfiniteShuffling = NO;
+//    self.bannerView.shouldInfiniteShuffling = NO;
 
     
 //    self.bannerView.defaultSelectItem = 1;
@@ -83,10 +85,15 @@
 
 - (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index {
     CHBannerCollectionViewCell *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"CHBannerCollectionViewCellID" forIndex:index];
-    cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
-    cell.titleStr = [NSString stringWithFormat:@"%@",@(index)];
+//    cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
+//    cell.titleStr = [NSString stringWithFormat:@"%@",@(index)];
     return cell;
 
+}
+
+- (void)bannerView:(CHBannerView *)bannerView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndex:(NSInteger)index {
+    cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
+    ((CHBannerCollectionViewCell *)cell).titleStr = [NSString stringWithFormat:@"%@",@(index)];
 }
 
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
