@@ -27,6 +27,8 @@
 
 @property (nonatomic ,assign) BOOL needsReload;
 
+@property (nonatomic ,readonly ,strong) UICollectionViewFlowLayout *flowLayout;
+
 @end
 
 @implementation CHBannerView
@@ -37,6 +39,10 @@
         _timeInterval = 5;
     }
     return _timeInterval;
+}
+
+- (UICollectionViewFlowLayout *)flowLayout {
+    return (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
 }
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
@@ -190,15 +196,14 @@
 
 /// MARK: scrollView停止滚动(user.是否是用户操作的)
 - (void)scrollViewDidEndScroll {
-    CGFloat offsetX = self.collectionView.contentOffset.x;
-    CGFloat itemWidth = self.collectionView.bounds.size.width;
-    NSInteger page = offsetX / self.bounds.size.width;
-    if ([self shouldInfiniteShuffling]) {
+    NSInteger page = self.countPage;
+    if ([self shouldInfiniteShuffling]) {//无限轮播到边界之后
         NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
-        if (page == 0) {
-            self.collectionView.contentOffset = CGPointMake(offsetX + self.originalItems * itemWidth * kSeed, 0);
-        } else if (page == cellCount - 1) {
-            self.collectionView.contentOffset = CGPointMake(offsetX - self.originalItems * itemWidth * kSeed, 0);
+        if (page == 0) {//
+            NSInteger compute = self.originalItems;
+            [self resetContentOffsetWithComputeItem:compute];
+        } else if (page == cellCount - 1) {//
+            [self resetContentOffsetWithComputeItem:-1];
         }
     }
     [self startTimer];
@@ -210,17 +215,10 @@
     [self.collectionView reloadData];
     [self.collectionView setNeedsLayout];
     [self.collectionView layoutIfNeeded];
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    CGFloat width = flowLayout.itemSize.width;
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:0;
-    CGFloat computeWidth = width * compute + ((compute - 1)>0?(compute - 1) * flowLayout.minimumLineSpacing:0);
-    if ([self shouldInfiniteShuffling]) {
-        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * flowLayout.minimumLineSpacing, 0);
-    } else {
-        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
-    }
+    [self resetContentOffsetWithComputeItem:compute];
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-        [self.delegate bannerView:self scrollToItemAtIndex:self.originalItems==0?-1:self.defaultSelectItem numberOfPages:self.originalItems];
+        [self.delegate bannerView:self scrollToItemAtIndex:self.originalItems==0?-1:self.originalItems-1<self.defaultSelectItem?0:self.defaultSelectItem numberOfPages:self.originalItems];
     }
     [self startTimer];
     self.needsReload = NO;
@@ -278,32 +276,40 @@
 }
 
 - (void)updateTimer {
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    CGFloat itemWidth = flowLayout.itemSize.width;
+    CGFloat itemWidth = self.flowLayout.itemSize.width;
     CGPoint contentOffset = self.collectionView.contentOffset;
-    CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * flowLayout.minimumLineSpacing;
-    while (decimals > itemWidth + flowLayout.minimumLineSpacing) {
+    CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
+    while (decimals > itemWidth + self.flowLayout.minimumLineSpacing) {
         decimals -= itemWidth;
-        decimals -= flowLayout.minimumLineSpacing;
+        decimals -= self.flowLayout.minimumLineSpacing;
     }
-    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + flowLayout.minimumLineSpacing, 0) animated:YES];
+    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0) animated:YES];
+}
+
+/**
+ 通过给定的Item设置contentOffset
+
+ @param compute 当前中间显示的Item
+ */
+- (void)resetContentOffsetWithComputeItem:(NSInteger)compute {
+    CGFloat computeWidth = compute * (self.flowLayout.itemSize.width + self.flowLayout.minimumLineSpacing);
+    if ([self shouldInfiniteShuffling]) {
+        self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing, 0);
+    } else {
+        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
+    }
 }
 
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
+    [self stopTimer];
     self.changeStatusBarPage = self.currentPage<0?0:self.currentPage;
 }
 
 - (void)applicationDidChangeStatusBarOrientationNotification:(NSNotification *)notification {
     [self.collectionView reloadData];
     [self layoutIfNeeded];
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    CGFloat width = flowLayout.itemSize.width;
-    CGFloat computeWidth = width * self.changeStatusBarPage;
-    if ([self shouldInfiniteShuffling]) {
-        self.collectionView.contentOffset = CGPointMake(flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth, 0);
-    } else {
-        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
-    }
+    [self resetContentOffsetWithComputeItem:self.changeStatusBarPage];
+    [self startTimer];
 }
 
 /// 是否允许自动滚动

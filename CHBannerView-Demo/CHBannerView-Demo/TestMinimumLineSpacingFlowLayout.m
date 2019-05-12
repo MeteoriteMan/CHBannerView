@@ -18,10 +18,8 @@
     self.minimumLineSpacing = 5;
     self.minimumInteritemSpacing = 0;
     CGFloat collectionViewWidth = self.collectionView.bounds.size.width;
-    NSInteger showCount = (int)(collectionViewWidth / width);
-    if (showCount == 0) {//这种情况不考虑
-    }
-    CGFloat headerFooterInterval = (collectionViewWidth - showCount * width - self.minimumLineSpacing * (showCount - 1)) / 2;
+    // 保证在中间显示
+    CGFloat headerFooterInterval = (collectionViewWidth - (width - self.minimumLineSpacing)) / 2;
     self.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
     self.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;

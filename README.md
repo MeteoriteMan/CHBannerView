@@ -117,6 +117,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.1.4|重写边界处理(一般来说碰不到.如果觉得会碰到的话可以把kSeed改大一些).修复横竖屏切换有minimumLineSpacing设置会错乱的BUG.可以参考一下"TestMinimumLineSpacingFlowLayout"的组头组尾设置.转屏暂停开启Timer.修复默认选中行和滚动到某行回调的冲突|
 |0.1.2|现在不需要在cellWillDisplay里头调用reloadData了.修复默认选中Item失效的BUG|
 |0.1.1|修复上个版本无限轮播与自动滚动属性失效的BUG.新增minimumLineSpacing的支持|
 |0.1.0|将Delegate分为DataSource与Delegate.代理方法重写.修复0.0.7版本中丢失的区块(纯手欠...)|
