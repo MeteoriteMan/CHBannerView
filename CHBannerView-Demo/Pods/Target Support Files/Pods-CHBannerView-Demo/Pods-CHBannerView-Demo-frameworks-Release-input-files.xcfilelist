@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-CHBannerView-Demo/Pods-CHBannerView-Demo-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/CHPageControl/CHPageControl.framework
+${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework
 ${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework

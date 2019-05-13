@@ -19,6 +19,9 @@
 		432AE05E21DF265D00848863 /* CollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */; };
 		432AE05F21DF265D00848863 /* CHBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */; };
 		43BCABEC226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */; };
+		43C11EDA228906D000564C23 /* DefaultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11ED9228906D000564C23 /* DefaultViewController.m */; };
+		43C11EE02289109500564C23 /* GlobalProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11EDF2289109500564C23 /* GlobalProgressHUD.m */; };
+		43C11EE3228913C900564C23 /* MinimumLineSpacingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11EE2228913C900564C23 /* MinimumLineSpacingViewController.m */; };
 		695076FF33CF492C464A1AAC /* Pods_CHBannerView_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10413A10AEBB59E146210BB4 /* Pods_CHBannerView_Demo.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +50,13 @@
 		432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewCell.m; sourceTree = "<group>"; };
 		43BCABEA226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestMinimumLineSpacingFlowLayout.h; sourceTree = "<group>"; };
 		43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestMinimumLineSpacingFlowLayout.m; sourceTree = "<group>"; };
+		43C11ED8228906D000564C23 /* DefaultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultViewController.h; sourceTree = "<group>"; };
+		43C11ED9228906D000564C23 /* DefaultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DefaultViewController.m; sourceTree = "<group>"; };
+		43C11EDC2289075E00564C23 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		43C11EDE2289109500564C23 /* GlobalProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalProgressHUD.h; sourceTree = "<group>"; };
+		43C11EDF2289109500564C23 /* GlobalProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlobalProgressHUD.m; sourceTree = "<group>"; };
+		43C11EE1228913C900564C23 /* MinimumLineSpacingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimumLineSpacingViewController.h; sourceTree = "<group>"; };
+		43C11EE2228913C900564C23 /* MinimumLineSpacingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinimumLineSpacingViewController.m; sourceTree = "<group>"; };
 		6FABA674288DEF4E0322EDA1 /* Pods-CHBannerView-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CHBannerView-Demo.release.xcconfig"; path = "Target Support Files/Pods-CHBannerView-Demo/Pods-CHBannerView-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		8F4DE0603D4CCAC331E916F2 /* Pods-CHBannerView-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CHBannerView-Demo.debug.xcconfig"; path = "Target Support Files/Pods-CHBannerView-Demo/Pods-CHBannerView-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,25 +116,64 @@
 			isa = PBXGroup;
 			children = (
 				430AD61821E30FAB00C2BF36 /* CHBannerView */,
-				432AE03121DF237700848863 /* AppDelegate.h */,
-				432AE03221DF237700848863 /* AppDelegate.m */,
-				431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */,
-				431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */,
-				43BCABEA226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.h */,
-				43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */,
 				432AE03421DF237700848863 /* ViewController.h */,
 				432AE03521DF237700848863 /* ViewController.m */,
+				43C11ED72289051400564C23 /* ViewController */,
+				43C11ED62289050300564C23 /* FlowLayout */,
 				432AE05C21DF265D00848863 /* CHBannerCollectionViewCell.h */,
 				432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */,
-				432AE05A21DF265D00848863 /* CollectionViewFlowLayout.h */,
-				432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */,
+				43C11EDD2289107200564C23 /* Tools */,
 				432AE03721DF237700848863 /* Main.storyboard */,
 				432AE03A21DF237900848863 /* Assets.xcassets */,
 				432AE03C21DF237900848863 /* LaunchScreen.storyboard */,
 				432AE03F21DF237900848863 /* Info.plist */,
 				432AE04021DF237900848863 /* main.m */,
+				43C11EDB2289073700564C23 /* Others */,
 			);
 			path = "CHBannerView-Demo";
+			sourceTree = "<group>";
+		};
+		43C11ED62289050300564C23 /* FlowLayout */ = {
+			isa = PBXGroup;
+			children = (
+				431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */,
+				431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */,
+				43BCABEA226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.h */,
+				43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */,
+				432AE05A21DF265D00848863 /* CollectionViewFlowLayout.h */,
+				432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */,
+			);
+			path = FlowLayout;
+			sourceTree = "<group>";
+		};
+		43C11ED72289051400564C23 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				43C11ED8228906D000564C23 /* DefaultViewController.h */,
+				43C11ED9228906D000564C23 /* DefaultViewController.m */,
+				43C11EE1228913C900564C23 /* MinimumLineSpacingViewController.h */,
+				43C11EE2228913C900564C23 /* MinimumLineSpacingViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		43C11EDB2289073700564C23 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				432AE03121DF237700848863 /* AppDelegate.h */,
+				432AE03221DF237700848863 /* AppDelegate.m */,
+				43C11EDC2289075E00564C23 /* PrefixHeader.pch */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
+		43C11EDD2289107200564C23 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				43C11EDE2289109500564C23 /* GlobalProgressHUD.h */,
+				43C11EDF2289109500564C23 /* GlobalProgressHUD.m */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		95188BB3A106C8EF93FBDFA6 /* Pods */ = {
@@ -255,9 +304,12 @@
 				43BCABEC226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m in Sources */,
 				431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */,
 				430AD61D21E30FAB00C2BF36 /* CHBannerView.m in Sources */,
+				43C11EE3228913C900564C23 /* MinimumLineSpacingViewController.m in Sources */,
 				432AE04121DF237900848863 /* main.m in Sources */,
+				43C11EDA228906D000564C23 /* DefaultViewController.m in Sources */,
 				432AE05F21DF265D00848863 /* CHBannerCollectionViewCell.m in Sources */,
 				432AE05E21DF265D00848863 /* CollectionViewFlowLayout.m in Sources */,
+				43C11EE02289109500564C23 /* GlobalProgressHUD.m in Sources */,
 				432AE03321DF237700848863 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +456,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F22VTWNS57;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -424,6 +477,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F22VTWNS57;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (

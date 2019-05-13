@@ -18,14 +18,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    self.window.backgroundColor = [UIColor whiteColor];
-    UITabBarController *tabbarController = [[UITabBarController alloc] init];
-    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:0]];
-    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:1]];
-    [tabbarController addChildViewController:[self creatControllerWithNavViewControllerWithIndex:2]];
-    self.window.rootViewController = tabbarController;
-    [self.window makeKeyAndVisible];
     return YES;
 }
 

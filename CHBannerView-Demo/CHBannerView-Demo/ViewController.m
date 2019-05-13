@@ -7,119 +7,71 @@
 //
 
 #import "ViewController.h"
-#import <Masonry.h>
-#import "CHBannerViewHeader.h"
-#import "CHBannerCollectionViewCell.h"
-#import "CollectionViewFlowLayout.h"
-#import "CHBannerCollectionViewFlowLayout.h"
-#import "CHBannerCollectionViewFlowLayout3DStyle.h"
-#import "TestMinimumLineSpacingFlowLayout.h"
+#import "DefaultViewController.h"
+#import "MinimumLineSpacingViewController.h"
 
-@interface ViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
+@interface ViewController () <UITableViewDataSource ,UITableViewDelegate>
 
-@property (nonatomic ,strong) CHBannerView *bannerView;
+@property (nonatomic ,strong) UITableView *tableView;
 
-@property (nonatomic ,strong) NSArray <NSObject *> *bannerModelArray;
+@property (nonatomic ,strong) NSArray <NSString *> *arrayTitle;
 
 @end
 
 @implementation ViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-//    self.navigationItem.title = [NSString stringWithFormat:@"%@" ,@(self.navigationController.viewControllers.count)];
-    [self.bannerView startTimer];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.bannerView stopTimer];
-}
+static NSString *UITableViewCellID = @"UITableViewCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-    self.view.backgroundColor = [UIColor whiteColor];
 
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.arrayTitle = @[@"默认样式" ,@"MinimumLineSpacing"];
 
-//    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
-//    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
-    self.bannerView.dataSource = self;
-    self.bannerView.delegate = self;
-    self.bannerView.timeInterval = 2;
-    /// 设置默认选中Item
-    self.bannerView.defaultSelectItem = 2;
-    self.bannerView.pageControl.interval = 5;
-    self.bannerView.stopAutoScrollInSingleItem = YES;
-    self.bannerView.cancelInfiniteShufflingInSingleItem = YES;
-
-//    self.bannerView.shouldAutoScroll = NO;
-//    self.bannerView.shouldInfiniteShuffling = NO;
-
-    
-//    self.bannerView.defaultSelectItem = 1;
-    [self.view addSubview:self.bannerView];
-    [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_topLayoutGuide).offset(12);
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.offset(0);
-        make.height.offset(190).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
-//        make.height.equalTo(self.bannerView.mas_width).multipliedBy(186.0 / 375.0);
+        make.top.equalTo(self.mas_topLayoutGuide);
+        make.bottom.equalTo(self.mas_bottomLayoutGuide);
     }];
-
-    NSMutableArray *arrayM = [NSMutableArray array];
-    for (int i = 0; i < 10; i++) {
-        [arrayM addObject:[[NSObject alloc] init]];
-    }
-    self.bannerModelArray = arrayM.copy;
-    [self.bannerView registerClass:[CHBannerCollectionViewCell class] forCellWithReuseIdentifier:@"CHBannerCollectionViewCellID"];
-    [self.bannerView reloadData];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:UITableViewCellID];
 
 }
 
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *)bannerView {
-    return self.bannerModelArray.count;
+// MARK: UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
 
-- (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index {
-    CHBannerCollectionViewCell *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"CHBannerCollectionViewCellID" forIndex:index];
-//    cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
-//    cell.titleStr = [NSString stringWithFormat:@"%@",@(index)];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.arrayTitle.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UITableViewCellID forIndexPath:indexPath];
+    cell.textLabel.text = self.arrayTitle[indexPath.row];
     return cell;
-
 }
 
-- (void)bannerView:(CHBannerView *)bannerView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndex:(NSInteger)index {
-    cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
-    ((CHBannerCollectionViewCell *)cell).titleStr = [NSString stringWithFormat:@"%@",@(index)];
-}
-
-- (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
-    NSLog(@"点击的是第%ld页",index);
-}
-
-- (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages {
-//    NSLog(@"滚动到第%ld页,总共有%ld页",index ,numberOfPages);
-//    NSLog(@"%@",collectionView);
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, numberOfPages];
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    if (arc4random_uniform(2)) {
-//        ViewController *vc = [[ViewController alloc] init];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    } else {
-        NSInteger count = 1;
-//    arc4random_uniform(4);
-        NSMutableArray *arrayM = [NSMutableArray array];
-        for (int i = 0; i < count; i++) {
-            [arrayM addObject:[[NSObject alloc] init]];
+// MARK: UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0: {// 默认样式
+            DefaultViewController *vc = [[DefaultViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
         }
-        self.bannerModelArray = arrayM.copy;
-        [self.bannerView reloadData];
-//    }
+            break;
+        case 1: {//MinimumLineSpacing
+            MinimumLineSpacingViewController *vc = [[MinimumLineSpacingViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 @end

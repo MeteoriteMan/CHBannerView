@@ -4,6 +4,7 @@ use_frameworks!
 target 'CHBannerView-Demo' do
 	pod 'Masonry'
 	pod 'CHPageControl'
+  pod 'MBProgressHUD'
   # Pods for CHBannerView-Demo
 
 end
