@@ -97,10 +97,10 @@
 
 // MARK: UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfSectionsInBannerView:)]) {
-        self.originalItems = [self.dataSource numberOfSectionsInBannerView:self];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfItemsInBannerView:)]) {
+        self.originalItems = [self.dataSource numberOfItemsInBannerView:self];
         self.pageControl.numberOfPages = self.originalItems;
-        return [self.dataSource numberOfSectionsInBannerView:self] * kSeed;
+        return [self.dataSource numberOfItemsInBannerView:self] * kSeed;
     } else {
         return 0;
     }
@@ -134,10 +134,15 @@
 // MARK: UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.collectionView) {
-        UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        CGFloat offsetX = scrollView.contentOffset.x;
-        CGFloat itemWidth = flowLayout.itemSize.width;
-        self.countPage = (offsetX + (itemWidth + flowLayout.minimumLineSpacing) * .5) / (itemWidth + flowLayout.minimumLineSpacing);
+        if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+            CGFloat offsetX = scrollView.contentOffset.x;
+            CGFloat itemWidth = self.flowLayout.itemSize.width;
+            self.countPage = (offsetX + (itemWidth + self.flowLayout.minimumLineSpacing) * .5) / (itemWidth + self.flowLayout.minimumLineSpacing);
+        } else {
+            CGFloat offsetY = scrollView.contentOffset.y;
+            CGFloat itemHeight = self.flowLayout.itemSize.height;
+            self.countPage = (offsetY + (itemHeight + self.flowLayout.minimumLineSpacing) * .5) / (itemHeight + self.flowLayout.minimumLineSpacing);
+        }
         if (self.originalItems != 0) {
             if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
                 self.currentPage = self.countPage % self.originalItems;
@@ -276,14 +281,26 @@
 }
 
 - (void)updateTimer {
-    CGFloat itemWidth = self.flowLayout.itemSize.width;
-    CGPoint contentOffset = self.collectionView.contentOffset;
-    CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
-    while (decimals > itemWidth + self.flowLayout.minimumLineSpacing) {
-        decimals -= itemWidth;
-        decimals -= self.flowLayout.minimumLineSpacing;
+    NSLog(@"contentOffset:%@" ,NSStringFromCGPoint(self.collectionView.contentOffset));
+    if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+        CGFloat itemWidth = self.flowLayout.itemSize.width;
+        CGPoint contentOffset = self.collectionView.contentOffset;
+        CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
+        while (decimals > itemWidth + self.flowLayout.minimumLineSpacing) {
+            decimals -= itemWidth;
+            decimals -= self.flowLayout.minimumLineSpacing;
+        }
+        [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0) animated:YES];
+    } else {
+        CGFloat itemHeight = self.flowLayout.itemSize.height;
+        CGPoint contentOffset = self.collectionView.contentOffset;
+        CGFloat decimals = contentOffset.y - self.countPage * itemHeight - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
+        while (decimals > itemHeight + self.flowLayout.minimumLineSpacing) {
+            decimals -= itemHeight;
+            decimals -= self.flowLayout.minimumLineSpacing;
+        }
+        [self.collectionView setContentOffset:CGPointMake(0, contentOffset.y - decimals + itemHeight + self.flowLayout.minimumLineSpacing) animated:YES];
     }
-    [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0) animated:YES];
 }
 
 /**
@@ -292,12 +309,22 @@
  @param compute 当前中间显示的Item
  */
 - (void)resetContentOffsetWithComputeItem:(NSInteger)compute {
-    CGFloat computeWidth = compute * (self.flowLayout.itemSize.width + self.flowLayout.minimumLineSpacing);
-    if ([self shouldInfiniteShuffling]) {
-        self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing, 0);
+    if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+        CGFloat computeWidth = compute * (self.flowLayout.itemSize.width + self.flowLayout.minimumLineSpacing);
+        if ([self shouldInfiniteShuffling]) {
+            self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing, 0);
+        } else {
+            self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
+        }
     } else {
-        self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
+        CGFloat computeHeight = compute * (self.flowLayout.itemSize.height + self.flowLayout.minimumLineSpacing);
+        if ([self shouldInfiniteShuffling]) {
+            self.collectionView.contentOffset = CGPointMake(0, self.flowLayout.itemSize.height * self.originalItems * kSeed * .5 + computeHeight + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing);
+        } else {
+            self.collectionView.contentOffset = CGPointMake(0, computeHeight);
+        }
     }
+
 }
 
 - (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {

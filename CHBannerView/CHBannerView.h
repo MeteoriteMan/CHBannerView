@@ -14,7 +14,7 @@
 @protocol CHBannerViewDataSource <NSObject>
 
 @required
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
+- (NSInteger)numberOfItemsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
 - (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
 

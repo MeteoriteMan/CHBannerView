@@ -52,6 +52,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
@@ -83,7 +86,7 @@
 
 }
 
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *)bannerView {
+- (NSInteger)numberOfItemsInBannerView:(CHBannerView *)bannerView {
     return self.bannerModelArray.count;
 }
 

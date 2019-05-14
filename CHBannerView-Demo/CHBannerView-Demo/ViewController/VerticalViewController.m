@@ -1,16 +1,16 @@
 //
-//  MinimumLineSpacingViewController.m
+//  VerticalViewController.m
 //  CHBannerView-Demo
 //
 //  Created by 张晨晖 on 2019/5/13.
 //  Copyright © 2019 张晨晖. All rights reserved.
 //
 
-#import "MinimumLineSpacingViewController.h"
-#import "TestMinimumLineSpacingFlowLayout.h"
-#import "CHBannerCollectionViewCell.h"
+#import "VerticalViewController.h"
+#import "VerticalCollectionViewFlowLayout.h"
+#import "MessageCell.h"
 
-@interface MinimumLineSpacingViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
+@interface VerticalViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
 
 @property (nonatomic ,strong) CHBannerView *bannerView;
 
@@ -20,7 +20,9 @@
 
 @end
 
-@implementation MinimumLineSpacingViewController
+@implementation VerticalViewController
+
+static NSString *MessageCellID = @"MessageCellID";
 
 - (void)loadData {
     [[GlobalProgressHUD progressHUD] showProgress];
@@ -58,7 +60,7 @@
 
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
+    VerticalCollectionViewFlowLayout *flowLayout = [[VerticalCollectionViewFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
@@ -68,10 +70,11 @@
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
         make.left.right.offset(0);
-        make.height.offset(190).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
+        /// 一次展示两条
+        make.height.offset(44 * 2);
     }];
 
-    [self.bannerView registerClass:[CHBannerCollectionViewCell class] forCellWithReuseIdentifier:@"CHBannerCollectionViewCellID"];
+    [self.bannerView registerClass:[MessageCell class] forCellWithReuseIdentifier:MessageCellID];
 
     self.buttonReload = [UIButton new];
     [self.buttonReload setTitle:@"reloadData" forState:UIControlStateNormal];
@@ -92,14 +95,14 @@
 }
 
 - (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index {
-    CHBannerCollectionViewCell *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"CHBannerCollectionViewCellID" forIndex:index];
+    MessageCell *cell = [bannerView dequeueReusableCellWithReuseIdentifier:MessageCellID forIndex:index];
     return cell;
 
 }
 
 - (void)bannerView:(CHBannerView *)bannerView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndex:(NSInteger)index {
     cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
-    ((CHBannerCollectionViewCell *)cell).titleStr = [NSString stringWithFormat:@"%@",@(index)];
+    ((MessageCell *)cell).text = [NSString stringWithFormat:@"这个是第%@条消息哦~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",@(index)];
 }
 
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
@@ -114,5 +117,6 @@
 - (void)pushClick {
     [self.navigationController pushViewController:[[[self class] alloc] init] animated:YES];
 }
+
 
 @end

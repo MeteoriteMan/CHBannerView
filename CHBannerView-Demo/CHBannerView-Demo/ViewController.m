@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "DefaultViewController.h"
 #import "MinimumLineSpacingViewController.h"
+#import "VerticalViewController.h"
 
 @interface ViewController () <UITableViewDataSource ,UITableViewDelegate>
 
@@ -25,8 +26,8 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-
-    self.arrayTitle = @[@"默认样式" ,@"MinimumLineSpacing"];
+    
+    self.arrayTitle = @[@"默认样式" ,@"MinimumLineSpacing" ,@"Vertical" ,];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.dataSource = self;
@@ -66,6 +67,11 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
             break;
         case 1: {//MinimumLineSpacing
             MinimumLineSpacingViewController *vc = [[MinimumLineSpacingViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 2: {//VerticalViewController
+            VerticalViewController *vc = [[VerticalViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;

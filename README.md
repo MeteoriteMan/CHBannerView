@@ -4,6 +4,10 @@
 
 ![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-Demo-iPhone%208.gif?raw=true)
 
+> 0.2.0新增垂直滚动支持
+>
+>![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-VerticalScroll.gif?raw=true)
+
 ## 使用
 
 #### 注意点
@@ -28,6 +32,11 @@ cell的适配注意点.
 **2.UI展示实现:**`<CHBannerViewDataSource> `
 
 ```
+
+/// 0.2.0及以上的用这个方法返回轮播图个数
+- (NSInteger)numberOfItemsInBannerView:(CHBannerView *)bannerView;
+
+/// 0.2.0以下的版本用这个返回轮播图个数
 - (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
 - (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
@@ -50,7 +59,11 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 /// 点击item的代理
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView didSelectItemAtIndex:(NSInteger)index;
 
+/// 滚动到某个Item的代理.一般用来给PageControl赋值
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages;
+
+/// 将要显示Cell代理.iOS8以上支持
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
 
 ```
 
@@ -113,10 +126,11 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 ## 更新记录
 
-**更新预告:1.准备在未来版本中新增对垂直滑动的支持,2.准备未来版本中移除PageControl.**
+**更新预告:1.准备未来版本中移除PageControl.**
 
 |版本|更新内容|
 |:--|:--|
+|0.2.0|垂直滚动的支持.注意,返回轮播图个数的代理方法改变了|
 |0.1.4|重写边界处理(一般来说碰不到.如果觉得会碰到的话可以把kSeed改大一些).修复横竖屏切换有minimumLineSpacing设置会错乱的BUG.可以参考一下"TestMinimumLineSpacingFlowLayout"的组头组尾设置.转屏暂停开启Timer.修复默认选中行和滚动到某行回调的冲突|
 |0.1.2|现在不需要在cellWillDisplay里头调用reloadData了.修复默认选中Item失效的BUG|
 |0.1.1|修复上个版本无限轮播与自动滚动属性失效的BUG.新增minimumLineSpacing的支持|
