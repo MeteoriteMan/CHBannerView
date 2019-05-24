@@ -1,6 +1,0 @@
-framework module CHPageControl {
-  umbrella header "CHPageControl-umbrella.h"
-
-  export *
-  module * { export * }
-}

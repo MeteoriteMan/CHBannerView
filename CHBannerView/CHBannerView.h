@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CHPageControl/CHPageControl.h>
 
 @class CHBannerView;
 
@@ -60,8 +59,6 @@
 
 /// 初始选中Item(默认是第一个:0)
 @property (nonatomic ,assign) NSUInteger defaultSelectItem;
-
-@property (nonatomic ,strong ,nullable) CHPageControl *pageControl;
 
 /// 刷新数据
 - (void)reloadData;

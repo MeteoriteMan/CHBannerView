@@ -52,7 +52,6 @@
 }
 
 - (void)setupUIWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
-    ///
     self.currentPage = -1;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarOrientationNotification:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -66,6 +65,7 @@
         self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
         // Fallback on earlier versions
+        [self ch_viewController].automaticallyAdjustsScrollViewInsets = NO;
     }
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self addSubview:self.collectionView];
@@ -82,16 +82,6 @@
                                           [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0]
                                           ,[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0]
                                           ]];
-
-    self.pageControl = [[CHPageControl alloc] init];
-    self.pageControl.userInteractionEnabled = NO;
-    [self addSubview:self.pageControl];
-    self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-    [self addConstraints:@[
-                                       [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0],
-                                       [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-4],
-                                       [NSLayoutConstraint constraintWithItem:self.pageControl attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:0 constant:4]
-                                       ]];
     [self setNeedsReload];
 }
 
@@ -99,7 +89,6 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfItemsInBannerView:)]) {
         self.originalItems = [self.dataSource numberOfItemsInBannerView:self];
-        self.pageControl.numberOfPages = self.originalItems;
         return [self.dataSource numberOfItemsInBannerView:self] * kSeed;
     } else {
         return 0;
@@ -146,7 +135,6 @@
         if (self.originalItems != 0) {
             if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
                 self.currentPage = self.countPage % self.originalItems;
-                self.pageControl.currentPage = self.currentPage;
                 if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
                     [self.delegate bannerView:self scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
                 }
@@ -154,7 +142,6 @@
         } else {//originalItems == 0
             if (self.currentPage == -1) {///初始状态
                 self.currentPage = 0;
-                self.pageControl.currentPage = self.currentPage;
                 if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
                     [self.delegate bannerView:self scrollToItemAtIndex:0 numberOfPages:0];
                 }
@@ -383,5 +370,14 @@
     return [self.collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
 }
 
+- (UIViewController *)ch_viewController {
+    for (UIView *view = self; view; view = view.superview) {
+        UIResponder *nextResponder = [view nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)nextResponder;
+        }
+    }
+    return nil;
+}
 
 @end

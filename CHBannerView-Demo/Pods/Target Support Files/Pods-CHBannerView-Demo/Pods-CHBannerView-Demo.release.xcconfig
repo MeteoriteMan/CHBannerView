@@ -1,9 +1,9 @@
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CHPageControl" "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CHPageControl/CHPageControl.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_CONFIGURATION_BUILD_DIR}/CHPageControl/CHPageControl.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/CHPageControl" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/Masonry"
-OTHER_LDFLAGS = $(inherited) -framework "CHPageControl" -framework "CoreGraphics" -framework "Foundation" -framework "MBProgressHUD" -framework "Masonry" -framework "QuartzCore" -framework "UIKit"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/Masonry"
+OTHER_LDFLAGS = $(inherited) -framework "CoreGraphics" -framework "Foundation" -framework "MBProgressHUD" -framework "Masonry" -framework "QuartzCore" -framework "UIKit"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.

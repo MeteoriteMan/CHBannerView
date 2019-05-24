@@ -57,13 +57,11 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    self.automaticallyAdjustsScrollViewInsets = NO;
     TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
-    self.bannerView.pageControl.interval = 5;
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);

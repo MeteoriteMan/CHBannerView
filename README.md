@@ -2,17 +2,27 @@
 
 ## 效果
 
-![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-Demo-iPhone%208.gif?raw=true)
+> 默认样式
+
+![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
+
+> 自定义样式
+
+![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
 
 > 0.2.0新增垂直滚动支持
->
+
 >![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-VerticalScroll.gif?raw=true)
+
+
+**转屏颜色变化是由于转屏后contentOffset位置变化需要重新计算.Cell为了调试方便我写的是设置的随机RGB色**
 
 ## 使用
 
 #### 注意点
 
-在iOS11一下需要在使用的控制器(UIViewController)内写下如下的代码.不然样式会乱(用过UIScrollView及其子类的应该都清楚吧)
+> 在iOS11一下需要在使用的控制器(UIViewController)内写下如下的代码.不然样式会乱(用过UIScrollView及其子类的应该都清楚吧).0.2.1版本以后默认在框架内部取出ViewController设置了(也是根据朋友反馈的需要精简设置)
+
 ```
 self.automaticallyAdjustsScrollViewInsets = NO;
 ```
@@ -130,6 +140,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.2.1|移除CHPageControl的支持,因为有朋友反馈说他们的pageControl已经高度自定制了,不需要多添加一个进去.|
 |0.2.0|垂直滚动的支持.注意,返回轮播图个数的代理方法改变了|
 |0.1.4|重写边界处理(一般来说碰不到.如果觉得会碰到的话可以把kSeed改大一些).修复横竖屏切换有minimumLineSpacing设置会错乱的BUG.可以参考一下"TestMinimumLineSpacingFlowLayout"的组头组尾设置.转屏暂停开启Timer.修复默认选中行和滚动到某行回调的冲突|
 |0.1.2|现在不需要在cellWillDisplay里头调用reloadData了.修复默认选中Item失效的BUG|
