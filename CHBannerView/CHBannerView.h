@@ -15,7 +15,15 @@
 @required
 - (NSInteger)numberOfItemsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
-- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
+/**
+ 获取当前Cell.getCurrentCell
+
+ @param bannerView bannerView
+ @param index 调用取cell的index
+ @param orignalIndex 计算用的的index
+ @return collectionViewCell
+ */
+- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
 
 @end
 

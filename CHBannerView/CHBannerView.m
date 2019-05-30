@@ -61,12 +61,6 @@
         collectionViewLayout = [[CHBannerCollectionViewFlowLayout alloc] init];
     }
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:collectionViewLayout];
-    if (@available(iOS 11.0, *)) {
-        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    } else {
-        // Fallback on earlier versions
-        [self ch_viewController].automaticallyAdjustsScrollViewInsets = NO;
-    }
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self addSubview:self.collectionView];
     self.collectionView.delegate = self;
@@ -100,8 +94,8 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(bannerView:cellForItemAtIndex:)]) {
-        return [self.dataSource bannerView:self cellForItemAtIndex:indexPath.item % self.originalItems];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(bannerView:cellForItemAtIndex:orignalIndex:)]) {
+        return [self.dataSource bannerView:self cellForItemAtIndex:indexPath.item orignalIndex:indexPath.item % self.originalItems];
     }
     NSAssert(YES, @"没有注册单元格");
     return nil;
@@ -268,7 +262,6 @@
 }
 
 - (void)updateTimer {
-    NSLog(@"contentOffset:%@" ,NSStringFromCGPoint(self.collectionView.contentOffset));
     if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
         CGFloat itemWidth = self.flowLayout.itemSize.width;
         CGPoint contentOffset = self.collectionView.contentOffset;
@@ -347,6 +340,15 @@
         return NO;
     } else {
         return YES;
+    }
+}
+
+- (void)didMoveToSuperview {
+    if (@available(iOS 11.0, *)) {
+        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+        [self ch_viewController].automaticallyAdjustsScrollViewInsets = NO;
     }
 }
 

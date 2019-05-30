@@ -49,6 +49,17 @@ cell的适配注意点.
 /// 0.2.0以下的版本用这个返回轮播图个数
 - (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
+/// 0.2.2及以上的版本用这个方法返回轮播图个数
+/**
+ 获取当前Cell.getCurrentCell
+
+ @param bannerView bannerView
+ @param index 调用取cell的index
+ @param orignalIndex 计算用的的index
+ @return collectionViewCell
+ */
+- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
+
 - (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
 
 ```
@@ -140,6 +151,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.2.2|修复iOS8下(iOS9以及iOS9以上没影响)不显示的Bug.cellForItemAtIndex代理方法有改动.详情请看注释|
 |0.2.1|移除CHPageControl的支持,因为有朋友反馈说他们的pageControl已经高度自定制了,不需要多添加一个进去.|
 |0.2.0|垂直滚动的支持.注意,返回轮播图个数的代理方法改变了|
 |0.1.4|重写边界处理(一般来说碰不到.如果觉得会碰到的话可以把kSeed改大一些).修复横竖屏切换有minimumLineSpacing设置会错乱的BUG.可以参考一下"TestMinimumLineSpacingFlowLayout"的组头组尾设置.转屏暂停开启Timer.修复默认选中行和滚动到某行回调的冲突|

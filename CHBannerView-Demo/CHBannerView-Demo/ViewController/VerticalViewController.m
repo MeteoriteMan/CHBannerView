@@ -92,7 +92,7 @@ static NSString *MessageCellID = @"MessageCellID";
     return self.bannerModelArray.count;
 }
 
-- (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index {
+- (UICollectionViewCell *)bannerView:(CHBannerView *)bannerView cellForItemAtIndex:(NSInteger)index orignalIndex:(NSInteger)orignalIndex {
     MessageCell *cell = [bannerView dequeueReusableCellWithReuseIdentifier:MessageCellID forIndex:index];
     return cell;
 
