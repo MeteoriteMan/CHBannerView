@@ -151,6 +151,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.2.3|完全禁止使用`init`方法创建|
 |0.2.2|修复iOS8下(iOS9以及iOS9以上没影响)不显示的Bug.cellForItemAtIndex代理方法有改动.详情请看注释|
 |0.2.1|移除CHPageControl的支持,因为有朋友反馈说他们的pageControl已经高度自定制了,不需要多添加一个进去.|
 |0.2.0|垂直滚动的支持.注意,返回轮播图个数的代理方法改变了|

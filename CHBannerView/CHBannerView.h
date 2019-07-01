@@ -47,9 +47,6 @@
 
 @property (nonatomic ,assign ,nullable) id <CHBannerViewDelegate> delegate;
 
-/// 请不要设置该属性的DataSource与Delegate
-@property (nonatomic, strong ,nullable) UICollectionView *collectionView;
-
 /// 是否允许自动滚动,默认为YES
 @property (nonatomic ,assign) BOOL shouldAutoScroll;
 

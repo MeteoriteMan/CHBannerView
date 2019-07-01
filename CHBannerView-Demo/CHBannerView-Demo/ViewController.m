@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "DefaultViewController.h"
+#import "3DViewController.h"
 #import "MinimumLineSpacingViewController.h"
 #import "VerticalViewController.h"
 
@@ -27,7 +28,7 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.arrayTitle = @[@"默认样式" ,@"MinimumLineSpacing" ,@"Vertical" ,];
+    self.arrayTitle = @[@"默认样式" ,@"3DStyle" ,@"MinimumLineSpacing" ,@"Vertical" ,];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.dataSource = self;
@@ -65,12 +66,17 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 1: {//MinimumLineSpacing
+        case 1: {// CHBannerCollectionViewFlowLayout3DStyle
+            _DViewController *vc = [[_DViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 2: {// MinimumLineSpacing
             MinimumLineSpacingViewController *vc = [[MinimumLineSpacingViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 2: {//VerticalViewController
+        case 3: {//VerticalViewController
             VerticalViewController *vc = [[VerticalViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }

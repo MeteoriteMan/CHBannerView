@@ -1,16 +1,16 @@
 //
-//  DefaultViewController.m
+//  3DViewController.m
 //  CHBannerView-Demo
 //
-//  Created by 张晨晖 on 2019/5/13.
+//  Created by 张晨晖 on 2019/6/26.
 //  Copyright © 2019 张晨晖. All rights reserved.
 //
 
-#import "DefaultViewController.h"
+#import "3DViewController.h"
+#import "CHBannerCollectionViewFlowLayout3DStyle.h"
 #import "CHBannerCollectionViewCell.h"
-#import <Masonry/Masonry.h>
 
-@interface DefaultViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
+@interface _DViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
 
 @property (nonatomic ,strong) CHBannerView *bannerView;
 
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation DefaultViewController
+@implementation _DViewController
 
 - (void)loadData {
     [[GlobalProgressHUD progressHUD] showProgress];
@@ -57,7 +57,8 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
+    CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
+    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
@@ -80,7 +81,6 @@
     }];
 
     [self.buttonReload addTarget:self action:@selector(loadData) forControlEvents:UIControlEventTouchUpInside];
-
     [self loadData];
 
 }

@@ -13,6 +13,8 @@
 
 @interface CHBannerView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
+@property (nonatomic, strong ,nullable) UICollectionView *collectionView;
+
 @property (nonatomic, strong) NSTimer *timer;
 
 /// 原始Item个数
@@ -43,6 +45,10 @@
 
 - (UICollectionViewFlowLayout *)flowLayout {
     return (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+}
+
+- (instancetype)init {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Must use initWithCollectionViewLayout: instead." userInfo:nil];
 }
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {

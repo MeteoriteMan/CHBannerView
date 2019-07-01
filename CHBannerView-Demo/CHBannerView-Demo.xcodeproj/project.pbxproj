@@ -18,6 +18,7 @@
 		432AE04121DF237900848863 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE04021DF237900848863 /* main.m */; };
 		432AE05E21DF265D00848863 /* CollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */; };
 		432AE05F21DF265D00848863 /* CHBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */; };
+		4346FAD522C30814004ABA45 /* 3DViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4346FAD422C30814004ABA45 /* 3DViewController.m */; };
 		43BCABEC226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */; };
 		43C11EDA228906D000564C23 /* DefaultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11ED9228906D000564C23 /* DefaultViewController.m */; };
 		43C11EE02289109500564C23 /* GlobalProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11EDF2289109500564C23 /* GlobalProgressHUD.m */; };
@@ -51,6 +52,8 @@
 		432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		432AE05C21DF265D00848863 /* CHBannerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewCell.h; sourceTree = "<group>"; };
 		432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewCell.m; sourceTree = "<group>"; };
+		4346FAD322C30814004ABA45 /* 3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3DViewController.h; sourceTree = "<group>"; };
+		4346FAD422C30814004ABA45 /* 3DViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = 3DViewController.m; sourceTree = "<group>"; };
 		43BCABEA226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestMinimumLineSpacingFlowLayout.h; sourceTree = "<group>"; };
 		43BCABEB226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestMinimumLineSpacingFlowLayout.m; sourceTree = "<group>"; };
 		43C11ED8228906D000564C23 /* DefaultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultViewController.h; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 			children = (
 				43C11ED8228906D000564C23 /* DefaultViewController.h */,
 				43C11ED9228906D000564C23 /* DefaultViewController.m */,
+				4346FAD322C30814004ABA45 /* 3DViewController.h */,
+				4346FAD422C30814004ABA45 /* 3DViewController.m */,
 				43C11EE1228913C900564C23 /* MinimumLineSpacingViewController.h */,
 				43C11EE2228913C900564C23 /* MinimumLineSpacingViewController.m */,
 				43C11EE72289377A00564C23 /* VerticalViewController.h */,
@@ -325,6 +330,7 @@
 				43C11EED228940EE00564C23 /* MessageCell.m in Sources */,
 				43C11EE62289374800564C23 /* VerticalCollectionViewFlowLayout.m in Sources */,
 				430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */,
+				4346FAD522C30814004ABA45 /* 3DViewController.m in Sources */,
 				432AE03621DF237700848863 /* ViewController.m in Sources */,
 				43BCABEC226F0A6300A37186 /* TestMinimumLineSpacingFlowLayout.m in Sources */,
 				431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */,
