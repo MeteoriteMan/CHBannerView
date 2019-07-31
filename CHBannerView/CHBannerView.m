@@ -59,8 +59,6 @@
 
 - (void)setupUIWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
     self.currentPage = -1;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarOrientationNotification:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidChangeStatusBarOrientationNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     self.shouldAutoScroll = YES;
     self.shouldInfiniteShuffling = YES;
     if (!collectionViewLayout) {
@@ -231,6 +229,13 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self reloadDataIfNeeded];
+
+    /// 刷新
+    [self stopTimer];
+    [self.collectionView reloadData];
+    [self layoutIfNeeded];
+    [self resetContentOffsetWithComputeItem:self.currentPage<0?0:self.currentPage];
+    [self startTimer];
 }
 
 // MARK: Timer
@@ -313,18 +318,6 @@
 
 }
 
-- (void)applicationWillChangeStatusBarOrientationNotification:(NSNotification *)notification {
-    [self stopTimer];
-    self.changeStatusBarPage = self.currentPage<0?0:self.currentPage;
-}
-
-- (void)applicationDidChangeStatusBarOrientationNotification:(NSNotification *)notification {
-    [self.collectionView reloadData];
-    [self layoutIfNeeded];
-    [self resetContentOffsetWithComputeItem:self.changeStatusBarPage];
-    [self startTimer];
-}
-
 /// 是否允许自动滚动
 - (BOOL)shouldAutoScroll {
     if (_shouldAutoScroll == NO) {
@@ -361,8 +354,6 @@
 - (void)removeFromSuperview {
     [super removeFromSuperview];
     [self stopTimer];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 // MARK:注册/获取单元格

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "CHBannerView"
-    s.version      = "0.2.3"
+    s.version      = "0.2.4"
     s.summary      = "一个UIKit下的轮播图框架"
     s.homepage     = "https://github.com/MeteoriteMan/CHBannerView"
     s.license      = "MIT"
