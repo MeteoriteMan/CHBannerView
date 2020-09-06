@@ -14,6 +14,9 @@
 
 >![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-VerticalScroll.gif?raw=true)
 
+> 0.3.0新增Timer下滚动距离自定义支持
+
+>![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-Demo-iPhone%20X.gif?raw=true)
 
 **转屏颜色变化是由于转屏后contentOffset位置变化需要重新计算.Cell为了调试方便我写的是设置的随机RGB色**
 
@@ -43,13 +46,10 @@ cell的适配注意点.
 
 ```
 
-/// 0.2.0及以上的用这个方法返回轮播图个数
+/// 轮播图个数
 - (NSInteger)numberOfItemsInBannerView:(CHBannerView *)bannerView;
 
-/// 0.2.0以下的版本用这个返回轮播图个数
-- (NSInteger)numberOfSectionsInBannerView:(CHBannerView *_Nonnull)bannerView;
-
-/// 0.2.2及以上的版本用这个方法返回轮播图个数
+/// 当前的轮播图,使用dequeue方法时使用index.取对应model使用orignalIndex.
 /**
  获取当前Cell.getCurrentCell
 
@@ -59,8 +59,6 @@ cell的适配注意点.
  @return collectionViewCell
  */
 - (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
-
-- (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index;
 
 ```
 
@@ -85,6 +83,12 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 /// 将要显示Cell代理.iOS8以上支持
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
+
+/// 自定义计算当前Page
+- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
+
+/// 自动滚动悬停位置代理
+- (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
 ```
 
@@ -151,6 +155,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.2.5|统一.m内NSInteger与NSUInteger数据类型为NSInteger.区分一次滚动与无限滚动.新增了自定义滚动范围的delegate方法|
 |0.2.4|支持iPad分屏模式|
 |0.2.3|完全禁止使用`init`方法创建|
 |0.2.2|修复iOS8下(iOS9以及iOS9以上没影响)不显示的Bug.cellForItemAtIndex代理方法有改动.详情请看注释|

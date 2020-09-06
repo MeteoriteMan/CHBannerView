@@ -25,7 +25,7 @@
 - (void)loadData {
     [[GlobalProgressHUD progressHUD] showProgress];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * GrobalProgressAnimatedTime), dispatch_get_main_queue(), ^{
             NSInteger count = arc4random_uniform(10);
             NSMutableArray *arrayM = [NSMutableArray array];
             for (int i = 0; i < count; i++) {

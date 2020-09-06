@@ -1,16 +1,17 @@
 //
-//  DefaultViewController.m
+//  SpecialHoverStyleViewController.m
 //  CHBannerView-Demo
 //
-//  Created by 张晨晖 on 2019/5/13.
-//  Copyright © 2019 张晨晖. All rights reserved.
+//  Created by ChenhuiZhang on 2020/9/4.
+//  Copyright © 2020 张晨晖. All rights reserved.
 //
 
-#import "DefaultViewController.h"
+#import "SpecialHoverStyleViewController.h"
 #import "CHBannerCollectionViewCell.h"
+#import "SpecialHoverStyleFlowLayout.h"
 #import <Masonry/Masonry.h>
 
-@interface DefaultViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
+@interface SpecialHoverStyleViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
 
 @property (nonatomic ,strong) CHBannerView *bannerView;
 
@@ -20,7 +21,7 @@
 
 @end
 
-@implementation DefaultViewController
+@implementation SpecialHoverStyleViewController
 
 - (void)loadData {
     [[GlobalProgressHUD progressHUD] showProgress];
@@ -49,18 +50,21 @@
     [self.bannerView stopTimer];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:nil];
+    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:[[SpecialHoverStyleFlowLayout alloc] init]];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
+    self.bannerView.shouldItemInfinite = NO;
+    self.bannerView.shouldShuffling = NO;
+    self.bannerView.shouldAutoScroll = YES;
+    
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
@@ -82,8 +86,9 @@
     [self.buttonReload addTarget:self action:@selector(loadData) forControlEvents:UIControlEventTouchUpInside];
 
     [self loadData];
-
 }
+
+// MARK: CHBannerView DataSource
 
 - (NSInteger)numberOfItemsInBannerView:(CHBannerView *)bannerView {
     return self.bannerModelArray.count;
@@ -94,6 +99,8 @@
     return cell;
 
 }
+
+// MARK: CHBannerView Delegate
 
 - (void)bannerView:(CHBannerView *)bannerView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndex:(NSInteger)index {
     cell.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1];
@@ -108,9 +115,73 @@
     self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, numberOfPages];
 }
 
+- (NSInteger)bannerView:(CHBannerView *)bannerView currentPageForScrollView:(UIScrollView * _Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout {
+    /*
+     这里就暂时不区分FlowLayout是如何滚动的了.
+     直接计算当前的Page
+     */
+    NSArray <NSIndexPath *> *indexPaths = [[bannerView indexPathsForVisibleItems] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSIndexPath *indexPath1 = (NSIndexPath *)obj1;
+        NSIndexPath *indexPath2 = (NSIndexPath *)obj2;
+        if (indexPath1.row > indexPath2.row) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }];
+    
+    CGFloat midLineX = scrollView.contentOffset.x + bannerView.bounds.size.width * .5;
+    
+    CGFloat minInterval = CGFLOAT_MAX;
+    NSInteger minIndex = 0;
+    
+    for (NSIndexPath *indexPath in indexPaths) {
+        UICollectionViewCell *cell = [bannerView cellForItemAtIndexPath:indexPath];
+        if (cell.frame.origin.x + cell.frame.size.width < midLineX) {/// 在左边
+            if (ABS(cell.frame.origin.x + cell.frame.size.width - midLineX) < minInterval) {
+                minInterval = ABS(cell.frame.origin.x + cell.frame.size.width - midLineX);
+                minIndex = indexPath.item;
+            }
+        } else if (cell.frame.origin.x > midLineX) {/// 在右边
+            if (ABS(cell.frame.origin.x - midLineX) < minInterval) {
+                minInterval = ABS(cell.frame.origin.x - midLineX);
+                minIndex = indexPath.item;
+            }
+        } else {// 在中间
+             return indexPath.item;
+        }
+    }
+    return minIndex;
+}
+
+- (CGPoint)bannerView:(CHBannerView *)bannerView nextHoverPointForScrollView:(UIScrollView * _Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
+    if (currentPage == numberOfPages - 2) {
+        // MARK: 最后一个Item的位置
+        CGFloat contentOffsetX = scrollView.contentSize.width - scrollView.bounds.size.width;
+        return CGPointMake(contentOffsetX, 0.0);
+    } else if (currentPage == numberOfPages - 1) {// 第一个Item的位置
+        return CGPointMake(0.0, 0.0);
+    } else {
+        CGFloat contentOffsetX = (currentPage + 1) * flowLayout.itemSize.width  + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
+        
+        return CGPointMake(contentOffsetX, 0.0);
+    }
+}
+
 // Action
 - (void)pushClick {
     [self.navigationController pushViewController:[[[self class] alloc] init] animated:YES];
 }
+
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

@@ -11,6 +11,8 @@
 #import "3DViewController.h"
 #import "MinimumLineSpacingViewController.h"
 #import "VerticalViewController.h"
+#import "CHGuideView.h"
+#import "SpecialHoverStyleViewController.h"
 
 @interface ViewController () <UITableViewDataSource ,UITableViewDelegate>
 
@@ -28,11 +30,17 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.arrayTitle = @[@"默认样式" ,@"3DStyle" ,@"MinimumLineSpacing" ,@"Vertical" ,];
+    self.arrayTitle = @[@"默认样式" ,@"3DStyle" ,@"MinimumLineSpacing" ,@"Vertical" ,@"BannerViewForWindow" ,@"蚂蚁财富财富直通车样式"];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.offset(0);
@@ -60,6 +68,7 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
 
 // MARK: UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
         case 0: {// 默认样式
             DefaultViewController *vc = [[DefaultViewController alloc] init];
@@ -78,6 +87,16 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
             break;
         case 3: {//VerticalViewController
             VerticalViewController *vc = [[VerticalViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 4: {//BannerViewForWindow
+            CHGuideView *guideView = [[CHGuideView alloc] init];
+            [guideView show];
+        }
+            break;
+        case 5: {//特殊悬停
+            SpecialHoverStyleViewController *vc = [[SpecialHoverStyleViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;

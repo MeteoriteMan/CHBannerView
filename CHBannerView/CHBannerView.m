@@ -9,7 +9,7 @@
 #import "CHBannerView.h"
 #import "CHBannerCollectionViewFlowLayout.h"
 
-#define kSeed ([self shouldInfiniteShuffling]?1000:1)
+#define kSeed ([self shouldItemInfinite]?1000:1)
 
 @interface CHBannerView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -20,12 +20,10 @@
 /// 原始Item个数
 @property (nonatomic ,assign) NSInteger originalItems;
 
-@property (nonatomic ,assign) NSUInteger countPage;
+@property (nonatomic ,assign) NSInteger countPage;
 
 /// 当前page,记录page位置,-1为初始化状态
 @property (nonatomic ,assign) NSInteger currentPage;
-
-@property (nonatomic ,assign) NSUInteger changeStatusBarPage;
 
 @property (nonatomic ,assign) BOOL needsReload;
 
@@ -34,6 +32,12 @@
 @end
 
 @implementation CHBannerView
+
+/// MARK: setter
+- (void)setBounces:(BOOL)bounces {
+    _bounces = bounces;
+    self.collectionView.bounces = bounces;
+}
 
 /// MARK: getter
 - (CGFloat)timeInterval {
@@ -60,7 +64,9 @@
 - (void)setupUIWithCollectionViewLayout:(UICollectionViewLayout *)collectionViewLayout {
     self.currentPage = -1;
     self.shouldAutoScroll = YES;
-    self.shouldInfiniteShuffling = YES;
+    self.shouldItemInfinite = YES;
+    self.shouldShuffling = YES;
+    
     if (!collectionViewLayout) {
         collectionViewLayout = [[CHBannerCollectionViewFlowLayout alloc] init];
     }
@@ -75,11 +81,12 @@
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addConstraints:@[
-                                          [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0],
-                                          [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0],
-                                          [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0]
-                                          ,[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0]
-                                          ]];
+        [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0],
+        [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0],
+        [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:0],
+        [NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0]
+    ]];
+    self.bounces = YES;
     [self setNeedsReload];
 }
 
@@ -120,7 +127,9 @@
 
 // MARK: UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == self.collectionView) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:currentPageForScrollView:flowLayout:)]) {
+        self.countPage = [self.delegate bannerView:self currentPageForScrollView:scrollView flowLayout:self.flowLayout];
+    } else {
         if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
             CGFloat offsetX = scrollView.contentOffset.x;
             CGFloat itemWidth = self.flowLayout.itemSize.width;
@@ -130,40 +139,37 @@
             CGFloat itemHeight = self.flowLayout.itemSize.height;
             self.countPage = (offsetY + (itemHeight + self.flowLayout.minimumLineSpacing) * .5) / (itemHeight + self.flowLayout.minimumLineSpacing);
         }
-        if (self.originalItems != 0) {
-            if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
-                self.currentPage = self.countPage % self.originalItems;
-                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-                    [self.delegate bannerView:self scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
-                }
-            }
-        } else {//originalItems == 0
-            if (self.currentPage == -1) {///初始状态
-                self.currentPage = 0;
-                if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-                    [self.delegate bannerView:self scrollToItemAtIndex:0 numberOfPages:0];
-                }
+    }
+    if (self.originalItems != 0) {
+        if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
+            self.currentPage = self.countPage % self.originalItems;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
+                [self.delegate bannerView:self scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
             }
         }
-        if (![self shouldInfiniteShuffling]) {
-            if (self.originalItems - 1 >= self.currentPage) {//最后一页
-                [self stopTimer];
+    } else {//originalItems == 0
+        if (self.currentPage == -1) {///初始状态
+            self.currentPage = 0;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
+                [self.delegate bannerView:self scrollToItemAtIndex:0 numberOfPages:0];
             }
+        }
+    }
+    if (![self shouldShuffling]) {
+        if (self.originalItems - 1 == self.currentPage) {//滚动到最后一页
+            [self stopTimer];
         }
     }
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {///开始手动滑动
-    if (scrollView == self.collectionView) {
-        [self stopTimer];
-    }
+// MARK: 开始拖拽
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self stopTimer];
 }
 
-/// ScrollView停止滚动动画
+/// ScrollView停止滚动动画.系统调用
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    if (scrollView == self.collectionView) {
-        [self scrollViewDidEndScroll];
-    }
+    [self scrollViewDidEndScroll:NO];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -171,23 +177,24 @@
         // 停止类型3
         BOOL stop = scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
         if (stop) {
-            [self scrollViewDidEndScroll];
+            [self scrollViewDidEndScroll:YES];
         }
     }
 }
 
+/// 当手指离开屏幕后，scrollView仍然在自行滚动，停止后，会触发这个方法
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     // 停止类型1、停止类型2
     BOOL stop = !scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
     if (stop) {
-        [self scrollViewDidEndScroll];
+        [self scrollViewDidEndScroll:YES];
     }
 }
 
 /// MARK: scrollView停止滚动(user.是否是用户操作的)
-- (void)scrollViewDidEndScroll {
+- (void)scrollViewDidEndScroll:(BOOL)user {
     NSInteger page = self.countPage;
-    if ([self shouldInfiniteShuffling]) {//无限轮播到边界之后
+    if ([self shouldShuffling] && [self shouldItemInfinite]) {//无限轮播到边界之后
         NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
         if (page == 0) {//
             NSInteger compute = self.originalItems;
@@ -196,7 +203,9 @@
             [self resetContentOffsetWithComputeItem:-1];
         }
     }
-    [self startTimer];
+    if (user && [self shouldShuffling]) {// 自动滚动不需要重新创建Timer
+        [self startTimer];
+    }
 }
 
 - (void)reloadData {
@@ -241,7 +250,7 @@
 // MARK: Timer
 - (void)startTimer {
     if ([self shouldAutoScroll]) {
-        if ([self shouldInfiniteShuffling]) {
+        if ([self shouldShuffling]) {
             if (self.originalItems != 0) {
                 if ([self shouldAutoScroll]) {
                     [self buildTimer];
@@ -273,25 +282,31 @@
 }
 
 - (void)updateTimer {
-    if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
-        CGFloat itemWidth = self.flowLayout.itemSize.width;
-        CGPoint contentOffset = self.collectionView.contentOffset;
-        CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
-        while (decimals > itemWidth + self.flowLayout.minimumLineSpacing) {
-            decimals -= itemWidth;
-            decimals -= self.flowLayout.minimumLineSpacing;
-        }
-        [self.collectionView setContentOffset:CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0) animated:YES];
+    CGPoint nextContentOffset = CGPointMake(0.0, 0.0);
+    if (self.dataSource && [self.delegate respondsToSelector:@selector(bannerView:nextHoverPointForScrollView:currentPage:flowLayout:numberOfPages:)]) {
+        nextContentOffset = [self.delegate bannerView:self nextHoverPointForScrollView:self.collectionView currentPage:self.countPage flowLayout:self.flowLayout numberOfPages:self.originalItems];
     } else {
-        CGFloat itemHeight = self.flowLayout.itemSize.height;
-        CGPoint contentOffset = self.collectionView.contentOffset;
-        CGFloat decimals = contentOffset.y - self.countPage * itemHeight - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
-        while (decimals > itemHeight + self.flowLayout.minimumLineSpacing) {
-            decimals -= itemHeight;
-            decimals -= self.flowLayout.minimumLineSpacing;
+        if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+            CGFloat itemWidth = self.flowLayout.itemSize.width;
+            CGPoint contentOffset = self.collectionView.contentOffset;
+            CGFloat decimals = contentOffset.x - self.countPage * itemWidth - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
+            while (decimals > itemWidth + self.flowLayout.minimumLineSpacing) {
+                decimals -= itemWidth;
+                decimals -= self.flowLayout.minimumLineSpacing;
+            }
+            nextContentOffset = CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0);
+        } else {
+            CGFloat itemHeight = self.flowLayout.itemSize.height;
+            CGPoint contentOffset = self.collectionView.contentOffset;
+            CGFloat decimals = contentOffset.y - self.countPage * itemHeight - (self.countPage - 1) * self.flowLayout.minimumLineSpacing;
+            while (decimals > itemHeight + self.flowLayout.minimumLineSpacing) {
+                decimals -= itemHeight;
+                decimals -= self.flowLayout.minimumLineSpacing;
+            }
+            nextContentOffset = CGPointMake(0, contentOffset.y - decimals + itemHeight + self.flowLayout.minimumLineSpacing);
         }
-        [self.collectionView setContentOffset:CGPointMake(0, contentOffset.y - decimals + itemHeight + self.flowLayout.minimumLineSpacing) animated:YES];
     }
+    [self.collectionView setContentOffset:nextContentOffset animated:YES];
 }
 
 /**
@@ -302,14 +317,14 @@
 - (void)resetContentOffsetWithComputeItem:(NSInteger)compute {
     if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
         CGFloat computeWidth = compute * (self.flowLayout.itemSize.width + self.flowLayout.minimumLineSpacing);
-        if ([self shouldInfiniteShuffling]) {
+        if ([self shouldItemInfinite]) {
             self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing, 0);
         } else {
             self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
         }
     } else {
         CGFloat computeHeight = compute * (self.flowLayout.itemSize.height + self.flowLayout.minimumLineSpacing);
-        if ([self shouldInfiniteShuffling]) {
+        if ([self shouldItemInfinite]) {
             self.collectionView.contentOffset = CGPointMake(0, self.flowLayout.itemSize.height * self.originalItems * kSeed * .5 + computeHeight + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing);
         } else {
             self.collectionView.contentOffset = CGPointMake(0, computeHeight);
@@ -331,11 +346,11 @@
 }
 
 /// 是否允许无限轮播
-- (BOOL)shouldInfiniteShuffling {
-    if (_shouldInfiniteShuffling == NO) {
+- (BOOL)shouldShuffling {
+    if (_shouldShuffling == NO) {
         return NO;
     }
-    if (self.originalItems == 1 && self.cancelInfiniteShufflingInSingleItem) {
+    if (self.originalItems == 1 && self.cancelShufflingInSingleItem) {
         return NO;
     } else {
         return YES;
@@ -367,6 +382,14 @@
 
 - (UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index {
     return [self.collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
+
+- (NSArray<NSIndexPath *> *)indexPathsForVisibleItems {
+    return [self.collectionView indexPathsForVisibleItems];
+}
+
+- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *_Nonnull)indexPath {
+    return [self.collectionView cellForItemAtIndexPath:indexPath];
 }
 
 - (UIViewController *)ch_viewController {
