@@ -7,7 +7,7 @@
 //
 
 #import "MinimumLineSpacingViewController.h"
-#import "TestMinimumLineSpacingFlowLayout.h"
+#import "MinimumLineSpacingFlowLayout.h"
 #import "CHBannerCollectionViewCell.h"
 
 @interface MinimumLineSpacingViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
@@ -54,10 +54,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-
     self.view.backgroundColor = [UIColor whiteColor];
-    TestMinimumLineSpacingFlowLayout *flowLayout = [[TestMinimumLineSpacingFlowLayout alloc] init];
+    MinimumLineSpacingFlowLayout *flowLayout = [[MinimumLineSpacingFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;

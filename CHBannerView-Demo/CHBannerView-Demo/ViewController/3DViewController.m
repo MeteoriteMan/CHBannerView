@@ -54,8 +54,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-
     self.view.backgroundColor = [UIColor whiteColor];
     CHBannerCollectionViewFlowLayout3DStyle *flowLayout = [[CHBannerCollectionViewFlowLayout3DStyle alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];

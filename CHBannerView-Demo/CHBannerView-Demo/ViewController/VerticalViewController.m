@@ -56,14 +56,13 @@ static NSString *MessageCellID = @"MessageCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-
     self.view.backgroundColor = [UIColor whiteColor];
     VerticalCollectionViewFlowLayout *flowLayout = [[VerticalCollectionViewFlowLayout alloc] init];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
+    self.bannerView.defaultSelectItem = 2;
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
@@ -109,6 +108,19 @@ static NSString *MessageCellID = @"MessageCellID";
 
 - (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages {
     self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, numberOfPages];
+}
+
+- (CGPoint)bannerView:(CHBannerView *)bannerView nextHoverPointForScrollView:(UIScrollView * _Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
+    NSInteger nextPage = (currentPage + 1)<=(numberOfPages-1)?(currentPage+1):0;
+    if (nextPage == 0) {
+        return CGPointMake(0.0, 0.0);
+    } else if (nextPage == numberOfPages - 1) {
+        CGFloat contentOffsetY = scrollView.contentSize.height - scrollView.bounds.size.height;
+        return CGPointMake(0.0, contentOffsetY);
+    } else {// 中间
+        CGFloat contentOffsetY = nextPage * flowLayout.itemSize.height  + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.height - flowLayout.minimumLineSpacing;
+        return CGPointMake(0.0, contentOffsetY);
+    }
 }
 
 // Action

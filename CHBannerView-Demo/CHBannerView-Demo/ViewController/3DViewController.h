@@ -6,11 +6,11 @@
 //  Copyright © 2019 张晨晖. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface _DViewController : UIViewController
+@interface _DViewController : BaseViewController
 
 @end
 

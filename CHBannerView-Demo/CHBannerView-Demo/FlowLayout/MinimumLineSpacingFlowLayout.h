@@ -1,5 +1,5 @@
 //
-//  TestMinimumLineSpacingFlowLayout.h
+//  MinimumLineSpacingFlowLayout.h
 //  CHBannerView-Demo
 //
 //  Created by 张晨晖 on 2019/4/23.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TestMinimumLineSpacingFlowLayout : UICollectionViewFlowLayout
+@interface MinimumLineSpacingFlowLayout : UICollectionViewFlowLayout
 
 @end
 

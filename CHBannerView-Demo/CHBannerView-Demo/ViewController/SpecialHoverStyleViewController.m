@@ -54,15 +54,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    
     self.view.backgroundColor = [UIColor whiteColor];
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:[[SpecialHoverStyleFlowLayout alloc] init]];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
     self.bannerView.shouldItemInfinite = NO;
-    self.bannerView.shouldShuffling = NO;
+    self.bannerView.shouldShuffling = YES;
     self.bannerView.shouldAutoScroll = YES;
     
     [self.view addSubview:self.bannerView];
@@ -155,15 +153,14 @@
 }
 
 - (CGPoint)bannerView:(CHBannerView *)bannerView nextHoverPointForScrollView:(UIScrollView * _Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
-    if (currentPage == numberOfPages - 2) {
-        // MARK: 最后一个Item的位置
+    NSInteger nextPage = (currentPage + 1)<=(numberOfPages-1)?(currentPage+1):0;
+    if (nextPage == 0) {
+        return CGPointMake(0.0, 0.0);
+    } else if (nextPage == numberOfPages - 1) {// MARK: 目前是最后一个Item
         CGFloat contentOffsetX = scrollView.contentSize.width - scrollView.bounds.size.width;
         return CGPointMake(contentOffsetX, 0.0);
-    } else if (currentPage == numberOfPages - 1) {// 第一个Item的位置
-        return CGPointMake(0.0, 0.0);
-    } else {
-        CGFloat contentOffsetX = (currentPage + 1) * flowLayout.itemSize.width  + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
-        
+    } else {// 中间
+        CGFloat contentOffsetX = nextPage * flowLayout.itemSize.width  + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
         return CGPointMake(contentOffsetX, 0.0);
     }
 }

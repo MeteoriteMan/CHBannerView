@@ -1,21 +1,21 @@
 //
-//  TestMinimumLineSpacingFlowLayout.m
+//  MinimumLineSpacingFlowLayout.m
 //  CHBannerView-Demo
 //
 //  Created by 张晨晖 on 2019/4/23.
 //  Copyright © 2019 张晨晖. All rights reserved.
 //
 
-#import "TestMinimumLineSpacingFlowLayout.h"
+#import "MinimumLineSpacingFlowLayout.h"
 
-@implementation TestMinimumLineSpacingFlowLayout
+@implementation MinimumLineSpacingFlowLayout
 
 - (void)prepareLayout {
     [super prepareLayout];
     CGFloat height = self.collectionView.bounds.size.height;
     CGFloat width = height * 16.0 / 9.0;
     self.itemSize = CGSizeMake(width, height);
-    self.minimumLineSpacing = 5;
+    self.minimumLineSpacing = 20;
     self.minimumInteritemSpacing = 0;
     CGFloat collectionViewWidth = self.collectionView.bounds.size.width;
     // 保证在中间显示

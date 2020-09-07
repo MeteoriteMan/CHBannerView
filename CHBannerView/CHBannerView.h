@@ -44,6 +44,11 @@
 - (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
 
 /// 自动滚动悬停位置代理
+/// @param bannerView bannerView
+/// @param scrollView 轮播图容器
+/// @param currentPage 计算用当前Page(非dataSourcePage)
+/// @param flowLayout flowLayout
+/// @param numberOfPages 计算用整个Pages(非dataSourcePage)
 - (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
 @end
