@@ -155,7 +155,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
-|0.2.5|统一.m内NSInteger与NSUInteger数据类型为NSInteger.区分一次滚动与无限滚动.新增了自定义滚动范围的delegate方法|
+|0.3.0|统一.m内NSInteger与NSUInteger数据类型为NSInteger.区分一次滚动与无限滚动.新增了自定义滚动范围以及计算当前Page的delegate方法|
 |0.2.4|支持iPad分屏模式|
 |0.2.3|完全禁止使用`init`方法创建|
 |0.2.2|修复iOS8下(iOS9以及iOS9以上没影响)不显示的Bug.cellForItemAtIndex代理方法有改动.详情请看注释|
