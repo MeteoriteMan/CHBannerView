@@ -31,11 +31,12 @@
 
 @end
 
-@implementation CHBannerView
+@implementation CHBannerView {
+    UIScrollViewDecelerationRate _decelerationRate;
+}
 
 /// MARK: setter
 - (void)setBounces:(BOOL)bounces {
-    _bounces = bounces;
     self.collectionView.bounces = bounces;
 }
 
@@ -48,9 +49,24 @@
     self.collectionView.clipsToBounds = clipsToBounds;
 }
 
+- (void)setDecelerationRate:(UIScrollViewDecelerationRate)decelerationRate {
+    self.collectionView.decelerationRate = decelerationRate;
+}
+
 /// MARK: getter
+- (BOOL)bounces {
+    return self.collectionView.bounces;
+}
+
 - (BOOL)scrollEnable {
     return self.collectionView.scrollEnabled;
+}
+
+- (UIScrollViewDecelerationRate)decelerationRate {
+    if (_decelerationRate == 0.0) {// 初始值0.0
+        _decelerationRate = UIScrollViewDecelerationRateFast;
+    }
+    return _decelerationRate;
 }
 
 - (NSTimeInterval)timeInterval {
@@ -88,7 +104,7 @@
     [self addSubview:self.collectionView];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
+    self.collectionView.decelerationRate = self.decelerationRate;
     self.collectionView.pagingEnabled = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;

@@ -94,6 +94,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 是否允许滚动
 @property (nonatomic ,assign) BOOL scrollEnable;
 
+/// 减速速度.范围0~1.0
+@property(nonatomic , assign) UIScrollViewDecelerationRate decelerationRate API_AVAILABLE(ios(3.0));
+
 /// 当前显示的Item的indexPaths
 @property (nonatomic, readonly) NSArray<NSIndexPath *> * _Nullable indexPathsForVisibleItems;
 
