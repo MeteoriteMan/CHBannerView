@@ -114,42 +114,20 @@
 }
 
 - (NSInteger)bannerView:(CHBannerView *)bannerView currentPageForScrollView:(UIScrollView * _Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout {
-    /*
-     这里就暂时不区分FlowLayout是如何滚动的了.
-     直接计算当前的Page
-     */
-    NSArray <NSIndexPath *> *indexPaths = [[bannerView indexPathsForVisibleItems] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        NSIndexPath *indexPath1 = (NSIndexPath *)obj1;
-        NSIndexPath *indexPath2 = (NSIndexPath *)obj2;
-        if (indexPath1.row > indexPath2.row) {
-            return YES;
-        } else {
-            return NO;
-        }
-    }];
     
-    CGFloat midLineX = scrollView.contentOffset.x + bannerView.bounds.size.width * .5;
+    CGFloat headerReferenceWidth = flowLayout.headerReferenceSize.width;
+    CGFloat minimumLineSpacing = flowLayout.minimumLineSpacing;
+    CGFloat itemWidth = flowLayout.itemSize.width;
     
-    CGFloat minInterval = CGFLOAT_MAX;
-    NSInteger minIndex = 0;
-    
-    for (NSIndexPath *indexPath in indexPaths) {
-        UICollectionViewCell *cell = [bannerView cellForItemAtIndexPath:indexPath];
-        if (cell.frame.origin.x + cell.frame.size.width < midLineX) {/// 在左边
-            if (ABS(cell.frame.origin.x + cell.frame.size.width - midLineX) < minInterval) {
-                minInterval = ABS(cell.frame.origin.x + cell.frame.size.width - midLineX);
-                minIndex = indexPath.item;
-            }
-        } else if (cell.frame.origin.x > midLineX) {/// 在右边
-            if (ABS(cell.frame.origin.x - midLineX) < minInterval) {
-                minInterval = ABS(cell.frame.origin.x - midLineX);
-                minIndex = indexPath.item;
-            }
-        } else {// 在中间
-             return indexPath.item;
-        }
+    CGFloat contentOffsetX = scrollView.contentOffset.x;
+    NSInteger currentPage = (contentOffsetX - headerReferenceWidth + scrollView.bounds.size.width * .5 + minimumLineSpacing * .5) / (itemWidth + minimumLineSpacing);
+    if (currentPage < 0) {
+        currentPage = 0;
+    } else if (currentPage >= self.bannerModelArray.count) {
+        currentPage = self.bannerModelArray.count - 1;
     }
-    return minIndex;
+    
+    return currentPage;
 }
 
 - (CGPoint)bannerView:(CHBannerView *)bannerView nextHoverPointForScrollView:(UIScrollView * _Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
@@ -160,7 +138,7 @@
         CGFloat contentOffsetX = scrollView.contentSize.width - scrollView.bounds.size.width;
         return CGPointMake(contentOffsetX, 0.0);
     } else {// 中间
-        CGFloat contentOffsetX = nextPage * flowLayout.itemSize.width  + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
+        CGFloat contentOffsetX = nextPage * flowLayout.itemSize.width + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
         return CGPointMake(contentOffsetX, 0.0);
     }
 }

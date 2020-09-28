@@ -53,6 +53,11 @@
     }
     //4.修正
     loc = CGPointMake(loc.x, minattr.frame.origin.y - self.collectionView.bounds.size.height * 1);
+    if (loc.x < 0) {
+        loc = CGPointMake(0.0, loc.y);
+    } else if (loc.x > self.collectionView.contentSize.width - self.collectionView.bounds.size.width) {
+        loc = CGPointMake(self.collectionView.contentSize.width - self.collectionView.bounds.size.width, loc.y);
+    }
     return loc;
 }
 

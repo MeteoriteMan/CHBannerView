@@ -21,14 +21,16 @@
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    UIView *viewLine = [UIView new];
-    viewLine.backgroundColor = [UIColor redColor];
-    [self.view addSubview:viewLine];
-    [viewLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.width.offset(1);
-        make.top.bottom.offset(0);
-    }];
+    if (UIDEBUG) {
+        UIView *viewLine = [UIView new];
+        viewLine.backgroundColor = [UIColor redColor];
+        [self.view addSubview:viewLine];
+        [viewLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.view);
+            make.width.offset(1);
+            make.top.bottom.offset(0);
+        }];
+    }
     
 }
 

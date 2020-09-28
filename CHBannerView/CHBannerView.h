@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class CHBannerView;
 
 @protocol CHBannerViewDataSource <NSObject>
 
 @required
+
 - (NSInteger)numberOfItemsInBannerView:(CHBannerView *_Nonnull)bannerView;
 
 /**
@@ -43,7 +46,7 @@
 /// 自定义计算当前Page
 - (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
 
-/// 自动滚动悬停位置代理
+/// 悬停位置代理
 /// @param bannerView bannerView
 /// @param scrollView 轮播图容器
 /// @param currentPage 计算用当前Page(非dataSourcePage)
@@ -79,14 +82,17 @@
 /// 在个数为1的时候取消无限轮播,默认为NO
 @property (nonatomic ,assign) BOOL cancelShufflingInSingleItem;
 
-/// 滚动时间间距
-@property (nonatomic ,assign) CGFloat timeInterval;
+/// 滚动时间间隔.默认5s
+@property (nonatomic ,assign) NSTimeInterval timeInterval;
 
 /// 初始选中Item(默认是第一个:0)
-@property (nonatomic ,assign) NSUInteger defaultSelectItem;
+@property (nonatomic ,assign) NSInteger defaultSelectItem;
 
 /// BannerViewd的Bounces效果.默认为YES
 @property (nonatomic ,assign) BOOL bounces;
+
+/// 是否允许滚动
+@property (nonatomic ,assign) BOOL scrollEnable;
 
 /// 当前显示的Item的indexPaths
 @property (nonatomic, readonly) NSArray<NSIndexPath *> * _Nullable indexPathsForVisibleItems;
@@ -116,3 +122,5 @@
 - (__kindof UICollectionViewCell *_Nonnull)dequeueReusableCellWithReuseIdentifier:(NSString *_Nonnull)identifier forIndex:(NSInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

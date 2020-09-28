@@ -9,6 +9,8 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
+#define UIDEBUG YES
+
 #import "CHBannerViewHeader.h"
 #import <Masonry.h>
 #import <MBProgressHUD/MBProgressHUD.h>

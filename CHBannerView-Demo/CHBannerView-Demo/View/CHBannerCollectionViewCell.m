@@ -37,23 +37,26 @@
 }
 
 - (void)setupUI {
-    UIView *viewLine = [UIView new];
-    viewLine.backgroundColor = [UIColor redColor];
-    [self addSubview:viewLine];
-    [viewLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self);
-        make.width.offset(1);
-        make.top.bottom.offset(0);
-    }];
-    
-    UIView *viewLine2 = [UIView new];
-    viewLine2.backgroundColor = [UIColor greenColor];
-    [self addSubview:viewLine2];
-    [viewLine2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(viewLine);
-        make.height.offset(20);
-        make.width.offset(20);
-    }];
+
+    if (UIDEBUG) {
+        UIView *viewLine = [UIView new];
+        viewLine.backgroundColor = [UIColor redColor];
+        [self addSubview:viewLine];
+        [viewLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self);
+            make.width.offset(1);
+            make.top.bottom.offset(0);
+        }];
+        
+        UIView *viewLine2 = [UIView new];
+        viewLine2.backgroundColor = [UIColor greenColor];
+        [self addSubview:viewLine2];
+        [viewLine2 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(viewLine);
+            make.height.offset(20);
+            make.width.offset(20);
+        }];
+    }
     
     self.labelTitle = [[UILabel alloc] init];
     self.labelTitle.font = [UIFont systemFontOfSize:50];

@@ -39,8 +39,21 @@
     self.collectionView.bounces = bounces;
 }
 
+- (void)setScrollEnable:(BOOL)scrollEnable {
+    self.collectionView.scrollEnabled = scrollEnable;
+}
+
+- (void)setClipsToBounds:(BOOL)clipsToBounds {
+    [super setClipsToBounds:clipsToBounds];
+    self.collectionView.clipsToBounds = clipsToBounds;
+}
+
 /// MARK: getter
-- (CGFloat)timeInterval {
+- (BOOL)scrollEnable {
+    return self.collectionView.scrollEnabled;
+}
+
+- (NSTimeInterval)timeInterval {
     if (_timeInterval <= 0) {
         _timeInterval = 5;
     }
@@ -144,7 +157,7 @@
         if (self.currentPage != self.countPage % self.originalItems) {///如果当前page改变了
             self.currentPage = self.countPage % self.originalItems;
             if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-                [self.delegate bannerView:self scrollToItemAtIndex:self.countPage % self.originalItems numberOfPages:self.originalItems];
+                [self.delegate bannerView:self scrollToItemAtIndex:self.currentPage numberOfPages:self.originalItems];
             }
         }
     } else {//originalItems == 0
@@ -216,9 +229,8 @@
     [self.collectionView layoutIfNeeded];
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:0;
     [self resetContentOffsetWithComputeItem:compute];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:scrollToItemAtIndex:numberOfPages:)]) {
-        [self.delegate bannerView:self scrollToItemAtIndex:self.originalItems==0?-1:self.originalItems-1<self.defaultSelectItem?0:self.defaultSelectItem numberOfPages:self.originalItems];
-    }
+    /// 绑定当前的countPage
+    [self scrollViewDidScroll:self.collectionView];
     [self startTimer];
     self.needsReload = NO;
 }

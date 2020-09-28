@@ -63,6 +63,7 @@ static NSString *MessageCellID = @"MessageCellID";
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
     self.bannerView.defaultSelectItem = 2;
+    self.bannerView.scrollEnable = NO;
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
