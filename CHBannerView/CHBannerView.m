@@ -27,6 +27,8 @@
 
 @property (nonatomic ,assign) BOOL needsReload;
 
+@property (nonatomic ,assign) BOOL needCallShowIndexWithoutScrollDelegateMothod;
+
 @property (nonatomic ,readonly ,strong) UICollectionViewFlowLayout *flowLayout;
 
 @end
@@ -156,8 +158,8 @@
 
 // MARK: UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:currentPageForScrollView:flowLayout:)]) {
-        self.countPage = [self.delegate bannerView:self currentPageForScrollView:scrollView flowLayout:self.flowLayout];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:currentPageForScrollView:flowLayout:numberOfPages:)]) {
+        self.countPage = [self.delegate bannerView:self currentPageForScrollView:scrollView flowLayout:self.flowLayout numberOfPages:self.originalItems * kSeed];
     } else {
         if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
             CGFloat offsetX = scrollView.contentOffset.x;
@@ -223,17 +225,24 @@
 /// MARK: scrollView停止滚动(user.是否是用户操作的)
 - (void)scrollViewDidEndScroll:(BOOL)user {
     NSInteger page = self.countPage;
-    if ([self shouldShuffling] && [self shouldItemInfinite]) {//无限轮播到边界之后
-        NSInteger cellCount = [self.collectionView numberOfItemsInSection:0];
-        if (page == 0) {//
-            NSInteger compute = self.originalItems;
+    if ([self shouldItemInfinite]) {//无限轮播到边界之后
+        NSInteger cellCount = self.originalItems * kSeed;
+        if (page == 0) {//左滑到尽头
+            NSInteger compute = 0;
             [self resetContentOffsetWithComputeItem:compute];
-        } else if (page == cellCount - 1) {//
-            [self resetContentOffsetWithComputeItem:-1];
+        } else if (page == cellCount - 1) {//右滑到尽头
+            [self stopTimer];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, self.timeInterval * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self resetContentOffsetWithComputeItem:0];
+                [self startTimer];
+            });
         }
     }
     if (user && [self shouldShuffling]) {// 自动滚动不需要重新创建Timer
         [self startTimer];
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:showIndexWithoutScroll:orignalIndex:)]) {
+        [self.delegate bannerView:self showIndexWithoutScroll:self.countPage orignalIndex:self.countPage];
     }
 }
 
@@ -249,6 +258,15 @@
     [self scrollViewDidScroll:self.collectionView];
     [self startTimer];
     self.needsReload = NO;
+    self.needCallShowIndexWithoutScrollDelegateMothod = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.needCallShowIndexWithoutScrollDelegateMothod) {
+            self.needCallShowIndexWithoutScrollDelegateMothod = NO;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:showIndexWithoutScroll:orignalIndex:)]) {
+                [self.delegate bannerView:self showIndexWithoutScroll:self.countPage orignalIndex:self.currentPage];
+            }
+        }
+    });
 }
 
 /// 刷新数据
@@ -344,13 +362,13 @@
  */
 - (void)resetContentOffsetWithComputeItem:(NSInteger)compute {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:nextHoverPointForScrollView:currentPage:flowLayout:numberOfPages:)]) {
-        self.collectionView.contentOffset = [self.delegate bannerView:self nextHoverPointForScrollView:self.collectionView currentPage:kSeed==1?(compute - 1):(self.originalItems * kSeed * .5 + compute - 1) flowLayout:self.flowLayout numberOfPages:self.originalItems * kSeed];
+        self.collectionView.contentOffset = [self.delegate bannerView:self nextHoverPointForScrollView:self.collectionView currentPage:kSeed==1?(compute - 1):(self.originalItems * kSeed * [self layoutMultipleWithItemInfiniteLoadingMode:self.itemInfiniteLoadingMode] + compute - 1) flowLayout:self.flowLayout numberOfPages:self.originalItems * kSeed];
     } else {
         if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
             CGFloat computeItemFrameX = self.flowLayout.headerReferenceSize.width + (self.flowLayout.minimumLineSpacing + self.flowLayout.itemSize.width) * compute;
             CGFloat computeWidth = computeItemFrameX - (self.collectionView.bounds.size.width - self.flowLayout.itemSize.width) * .5;
             if ([self shouldItemInfinite]) {
-                self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * .5 + computeWidth + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing, 0);
+                self.collectionView.contentOffset = CGPointMake(self.flowLayout.itemSize.width * self.originalItems * kSeed * [self layoutMultipleWithItemInfiniteLoadingMode:self.itemInfiniteLoadingMode] + computeWidth + (self.originalItems * kSeed * [self layoutMultipleWithItemInfiniteLoadingMode:self.itemInfiniteLoadingMode]) * self.flowLayout.minimumLineSpacing, 0);
             } else {
                 self.collectionView.contentOffset = CGPointMake(computeWidth, 0);
             }
@@ -358,11 +376,28 @@
             CGFloat computeItemFrameY = self.flowLayout.headerReferenceSize.height + (self.flowLayout.minimumLineSpacing + self.flowLayout.itemSize.height) * compute;
             CGFloat computeHeight = computeItemFrameY - (self.collectionView.bounds.size.height - self.flowLayout.itemSize.height) * .5;
             if ([self shouldItemInfinite]) {
-                self.collectionView.contentOffset = CGPointMake(0, self.flowLayout.itemSize.height * self.originalItems * kSeed * .5 + computeHeight + (self.originalItems * kSeed * .5) * self.flowLayout.minimumLineSpacing);
+                self.collectionView.contentOffset = CGPointMake(0, self.flowLayout.itemSize.height * self.originalItems * kSeed * [self layoutMultipleWithItemInfiniteLoadingMode:self.itemInfiniteLoadingMode] + computeHeight + (self.originalItems * kSeed * [self layoutMultipleWithItemInfiniteLoadingMode:self.itemInfiniteLoadingMode]) * self.flowLayout.minimumLineSpacing);
             } else {
                 self.collectionView.contentOffset = CGPointMake(0, computeHeight);
             }
         }
+    }
+}
+
+- (CGFloat)layoutMultipleWithItemInfiniteLoadingMode:(CHBannerViewItemInfiniteLoadingMode)itemInfiniteLoadingMode {
+    switch (itemInfiniteLoadingMode) {
+        case CHBannerViewItemInfiniteLoadingModeMiddle: {
+            return 0.5;
+        }
+            break;
+        case CHBannerViewItemInfiniteLoadingModeLeft: {
+            return 0.0;
+        }
+            break;
+        default: {
+            return 0.5;
+        }
+            break;
     }
 }
 

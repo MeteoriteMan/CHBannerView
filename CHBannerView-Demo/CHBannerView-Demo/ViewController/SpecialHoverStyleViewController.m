@@ -13,6 +13,8 @@
 
 @interface SpecialHoverStyleViewController () <CHBannerViewDataSource ,CHBannerViewDelegate>
 
+@property (nonatomic ,strong) SpecialHoverStyleFlowLayout *flowLayout;
+
 @property (nonatomic ,strong) CHBannerView *bannerView;
 
 @property (nonatomic ,strong) NSArray <NSObject *> *bannerModelArray;
@@ -33,6 +35,27 @@
                 [arrayM addObject:[[NSObject alloc] init]];
             }
             self.bannerModelArray = arrayM.copy;
+
+            if (self.bannerModelArray.count == 1) {// 居中
+                CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
+                CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
+                self.flowLayout.itemSize = CGSizeMake(width, height);
+                self.flowLayout.minimumLineSpacing = 20;
+                self.flowLayout.minimumInteritemSpacing = 0;
+                CGFloat headerFooterInterval = (UIScreen.mainScreen.bounds.size.width - width) * .5;
+                self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+                self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+            } else {
+                CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
+                CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
+                self.flowLayout.itemSize = CGSizeMake(width, height);
+                self.flowLayout.minimumLineSpacing = 20;
+                self.flowLayout.minimumInteritemSpacing = 0;
+                CGFloat headerFooterInterval = 20;
+                self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+                self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+            }
+
             [self.bannerView reloadData];
             [[GlobalProgressHUD progressHUD] hideProgress];
         });
@@ -55,19 +78,22 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
-    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:[[SpecialHoverStyleFlowLayout alloc] init]];
+    self.flowLayout = [[SpecialHoverStyleFlowLayout alloc] init];
+    self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:self.flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
     self.bannerView.shouldItemInfinite = NO;
     self.bannerView.shouldShuffling = YES;
     self.bannerView.shouldAutoScroll = YES;
+    self.bannerView.bounces = NO;
+    self.bannerView.itemInfiniteLoadingMode = CHBannerViewItemInfiniteLoadingModeLeft;
     
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);
         make.left.right.offset(0);
-        make.height.offset(190).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
+        make.height.offset(160).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
     }];
 
     [self.bannerView registerClass:[CHBannerCollectionViewCell class] forCellWithReuseIdentifier:@"CHBannerCollectionViewCellID"];
@@ -106,41 +132,44 @@
 }
 
 - (void)bannerView:(UICollectionView *)collectionView didSelectItemAtIndex:(NSInteger)index {
-    NSLog(@"点击的是第%ld页",index);
+    NSLog(@"点击的是第%ld页",(long)index);
 }
 
 - (void)bannerView:(UICollectionView *)collectionView scrollToItemAtIndex:(NSInteger)index numberOfPages:(NSInteger)numberOfPages {
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, numberOfPages];
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld", index + 1, (long)numberOfPages];
 }
 
-- (NSInteger)bannerView:(CHBannerView *)bannerView currentPageForScrollView:(UIScrollView * _Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout {
-    
+- (void)bannerView:(CHBannerView *)bannerView showIndexWithoutScroll:(NSInteger)index orignalIndex:(NSInteger)orignalIndex {
+    CHBannerCollectionViewCell *cell = (CHBannerCollectionViewCell *)[bannerView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    NSLog(@"当前展示的Index:%ld 当前的cell:%@", (long)orignalIndex ,cell);
+    [cell startAnimation];
+}
+
+- (NSInteger)bannerView:(CHBannerView *)bannerView currentPageForScrollView:(UIScrollView * _Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
     CGFloat headerReferenceWidth = flowLayout.headerReferenceSize.width;
     CGFloat minimumLineSpacing = flowLayout.minimumLineSpacing;
     CGFloat itemWidth = flowLayout.itemSize.width;
-    
     CGFloat contentOffsetX = scrollView.contentOffset.x;
     NSInteger currentPage = (contentOffsetX - headerReferenceWidth + scrollView.bounds.size.width * .5 + minimumLineSpacing * .5) / (itemWidth + minimumLineSpacing);
     if (currentPage < 0) {
         currentPage = 0;
-    } else if (currentPage >= self.bannerModelArray.count) {
-        currentPage = self.bannerModelArray.count - 1;
+    } else if (currentPage >= numberOfPages) {
+        currentPage = numberOfPages - 1;
     }
-    
     return currentPage;
 }
 
 - (CGPoint)bannerView:(CHBannerView *)bannerView nextHoverPointForScrollView:(UIScrollView * _Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout * _Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages {
     NSInteger nextPage = (currentPage + 1)<=(numberOfPages-1)?(currentPage+1):0;
+    CGFloat contentOffsetX = 0.0;
     if (nextPage == 0) {
-        return CGPointMake(0.0, 0.0);
+        contentOffsetX = 0.0;
     } else if (nextPage == numberOfPages - 1) {// MARK: 目前是最后一个Item
-        CGFloat contentOffsetX = scrollView.contentSize.width - scrollView.bounds.size.width;
-        return CGPointMake(contentOffsetX, 0.0);
+        contentOffsetX = scrollView.contentSize.width - scrollView.bounds.size.width;
     } else {// 中间
-        CGFloat contentOffsetX = nextPage * flowLayout.itemSize.width + currentPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - flowLayout.minimumLineSpacing;
-        return CGPointMake(contentOffsetX, 0.0);
+        contentOffsetX = nextPage * flowLayout.itemSize.width  + nextPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - (scrollView.bounds.size.width * .5 - flowLayout.itemSize.width * .5);
     }
+    return CGPointMake(contentOffsetX, 0.0);
 }
 
 // Action

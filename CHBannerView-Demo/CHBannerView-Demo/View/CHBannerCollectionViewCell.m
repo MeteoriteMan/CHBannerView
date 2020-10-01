@@ -66,4 +66,15 @@
     }];
 }
 
+- (void)startAnimation {
+    UIColor *backgroundColor = self.backgroundColor;
+    [UIView animateWithDuration:.25 animations:^{
+        self.backgroundColor = [UIColor greenColor];
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:.25 animations:^{
+            self.backgroundColor = backgroundColor;
+        }];
+    }];
+}
+
 @end

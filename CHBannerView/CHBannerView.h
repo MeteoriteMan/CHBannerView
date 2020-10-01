@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
+    CHBannerViewItemInfiniteLoadingModeMiddle,
+    CHBannerViewItemInfiniteLoadingModeLeft,
+};
+
 @class CHBannerView;
 
 @protocol CHBannerViewDataSource <NSObject>
@@ -23,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param bannerView bannerView
  @param index 调用取cell的index
- @param orignalIndex 计算用的的index
+ @param orignalIndex 数据源对应的index
  @return collectionViewCell
  */
 - (UICollectionViewCell *_Nonnull)bannerView:(CHBannerView *_Nonnull)bannerView cellForItemAtIndex:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
@@ -43,8 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 将要显示的Cell
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
 
-/// 自定义计算当前Page
-- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
+/// 自定义计算当前Page.(分页位置)
+/// @param numberOfPages 计算用整个Pages(非dataSourcePage)
+- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;;
 
 /// 悬停位置代理
 /// @param bannerView bannerView
@@ -53,6 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param flowLayout flowLayout
 /// @param numberOfPages 计算用整个Pages(非dataSourcePage)
 - (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
+
+/// 停止滚动时显示的Item
+/// @param bannerView bannerView
+/// @param index 停止的Page
+/// @param orignalIndex 数据源对应的orignalIndex
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView showIndexWithoutScroll:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
 
 @end
 
@@ -75,6 +87,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// item是否无限,默认为YES.为NO时,当展示第一个item时,左边无item
 @property (nonatomic ,assign) BOOL shouldItemInfinite;
+
+/// shouldItemInfinite为YES时的从哪里开始布局.默认从中间
+@property (nonatomic ,assign) CHBannerViewItemInfiniteLoadingMode itemInfiniteLoadingMode;
 
 /// 不停轮播,默认为YES.当一轮滚动完了后不再滚动,设置为NO.
 @property (nonatomic ,assign) BOOL shouldShuffling;

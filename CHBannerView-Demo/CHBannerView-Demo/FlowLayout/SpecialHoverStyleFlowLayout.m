@@ -12,16 +12,6 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-    CGFloat height = self.collectionView.bounds.size.height;
-    CGFloat width = UIScreen.mainScreen.bounds.size.width - 80;
-    self.itemSize = CGSizeMake(width, height);
-    self.minimumLineSpacing = 20;
-    self.minimumInteritemSpacing = 0;
-//    CGFloat collectionViewWidth = self.collectionView.bounds.size.width;
-    // 保证在中间显示
-    CGFloat headerFooterInterval = 8;
-    self.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
-    self.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 }
 
@@ -71,12 +61,12 @@
     return YES;
 }
 
-- (CGSize)collectionViewContentSize {
-    CGSize contentSize = [super collectionViewContentSize];
-    if (contentSize.width <= self.collectionView.bounds.size.width) {
-        contentSize.width = self.collectionView.bounds.size.width + 1;
-    }
-    return contentSize;
-}
+//- (CGSize)collectionViewContentSize {
+//    CGSize contentSize = [super collectionViewContentSize];
+//    if (contentSize.width <= self.collectionView.bounds.size.width) {
+//        contentSize.width = self.collectionView.bounds.size.width + 1;
+//    }
+//    return contentSize;
+//}
 
 @end

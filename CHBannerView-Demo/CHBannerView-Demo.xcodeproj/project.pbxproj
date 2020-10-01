@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		430AD61D21E30FAB00C2BF36 /* CHBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 430AD61921E30FAB00C2BF36 /* CHBannerView.m */; };
 		430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 430AD61C21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m */; };
+		43143746252566670084AEA1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43143744252566660084AEA1 /* ViewController.m */; };
 		431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */; };
 		432AE03321DF237700848863 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE03221DF237700848863 /* AppDelegate.m */; };
-		432AE03621DF237700848863 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE03521DF237700848863 /* ViewController.m */; };
 		432AE03921DF237700848863 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432AE03721DF237700848863 /* Main.storyboard */; };
 		432AE03B21DF237900848863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432AE03A21DF237900848863 /* Assets.xcassets */; };
 		432AE03E21DF237900848863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432AE03C21DF237900848863 /* LaunchScreen.storyboard */; };
@@ -40,14 +40,14 @@
 		430AD61A21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		430AD61B21E30FAB00C2BF36 /* CHBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHBannerView.h; sourceTree = "<group>"; };
 		430AD61C21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		43143744252566660084AEA1 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		43143745252566660084AEA1 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		431E9BFD222653F200BB1404 /* CHBannerViewHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerViewHeader.h; sourceTree = "<group>"; };
 		431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout3DStyle.h; sourceTree = "<group>"; };
 		431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout3DStyle.m; sourceTree = "<group>"; };
 		432AE02E21DF237700848863 /* CHBannerView-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CHBannerView-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		432AE03121DF237700848863 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		432AE03221DF237700848863 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		432AE03421DF237700848863 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		432AE03521DF237700848863 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		432AE03821DF237700848863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		432AE03A21DF237900848863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		432AE03D21DF237900848863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -143,8 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				430AD61821E30FAB00C2BF36 /* CHBannerView */,
-				432AE03421DF237700848863 /* ViewController.h */,
-				432AE03521DF237700848863 /* ViewController.m */,
 				43C11ED72289051400564C23 /* ViewController */,
 				43C11ED62289050300564C23 /* FlowLayout */,
 				D61853E624FEAD9E002D4F31 /* View */,
@@ -181,6 +179,8 @@
 		43C11ED72289051400564C23 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				43143745252566660084AEA1 /* ViewController.h */,
+				43143744252566660084AEA1 /* ViewController.m */,
 				D6F2C4AE250682B100D94B0C /* BaseViewController.h */,
 				D6F2C4AF250682B100D94B0C /* BaseViewController.m */,
 				43C11ED8228906D000564C23 /* DefaultViewController.h */,
@@ -266,7 +266,7 @@
 		432AE02621DF237700848863 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "张晨晖";
 				TargetAttributes = {
 					432AE02D21DF237700848863 = {
@@ -352,12 +352,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43143746252566670084AEA1 /* ViewController.m in Sources */,
 				43C11EED228940EE00564C23 /* MessageCell.m in Sources */,
 				43C11EE62289374800564C23 /* VerticalCollectionViewFlowLayout.m in Sources */,
 				430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */,
 				4346FAD522C30814004ABA45 /* 3DViewController.m in Sources */,
 				D65DB47A25014BA70001612D /* SpecialHoverStyleFlowLayout.m in Sources */,
-				432AE03621DF237700848863 /* ViewController.m in Sources */,
 				D61853EC24FEAF06002D4F31 /* GuideViewFlowLayout.m in Sources */,
 				43BCABEC226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m in Sources */,
 				431F1B6121FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m in Sources */,
@@ -424,6 +424,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -449,7 +450,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -483,6 +484,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -502,7 +504,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -520,7 +522,7 @@
 				DEVELOPMENT_TEAM = F22VTWNS57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -541,7 +543,7 @@
 				DEVELOPMENT_TEAM = F22VTWNS57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
