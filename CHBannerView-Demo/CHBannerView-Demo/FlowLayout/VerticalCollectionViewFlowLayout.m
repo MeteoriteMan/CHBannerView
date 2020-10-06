@@ -14,7 +14,7 @@
     [super prepareLayout];
     // 设置item的大小
     //    12 12
-    CGFloat height = self.collectionView.bounds.size.height;
+//    CGFloat height = self.collectionView.bounds.size.height;
     CGFloat width = self.collectionView.bounds.size.width;
     self.itemSize = CGSizeMake(width, 44);
     // 间距

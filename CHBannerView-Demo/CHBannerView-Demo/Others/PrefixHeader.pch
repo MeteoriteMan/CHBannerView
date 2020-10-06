@@ -9,7 +9,7 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
-#define UIDEBUG YES
+#define UIDEBUG NO
 
 #import "CHBannerViewHeader.h"
 #import <Masonry.h>

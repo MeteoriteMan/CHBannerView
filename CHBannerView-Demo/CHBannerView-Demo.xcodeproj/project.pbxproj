@@ -45,6 +45,7 @@
 		431E9BFD222653F200BB1404 /* CHBannerViewHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerViewHeader.h; sourceTree = "<group>"; };
 		431F1B5F21FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHBannerCollectionViewFlowLayout3DStyle.h; sourceTree = "<group>"; };
 		431F1B6021FAB4F40048FD1F /* CHBannerCollectionViewFlowLayout3DStyle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewFlowLayout3DStyle.m; sourceTree = "<group>"; };
+		431FDB01252C6BAC0072C1BE /* CHBannerView-Demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CHBannerView-Demo.entitlements"; sourceTree = "<group>"; };
 		432AE02E21DF237700848863 /* CHBannerView-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CHBannerView-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		432AE03121DF237700848863 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		432AE03221DF237700848863 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 		432AE03021DF237700848863 /* CHBannerView-Demo */ = {
 			isa = PBXGroup;
 			children = (
+				431FDB01252C6BAC0072C1BE /* CHBannerView-Demo.entitlements */,
 				430AD61821E30FAB00C2BF36 /* CHBannerView */,
 				43C11ED72289051400564C23 /* ViewController */,
 				43C11ED62289050300564C23 /* FlowLayout */,
@@ -518,17 +520,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_ENTITLEMENTS = "CHBannerView-Demo/CHBannerView-Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F22VTWNS57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chenhuizhang.CHBannerView-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -539,17 +545,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_ENTITLEMENTS = "CHBannerView-Demo/CHBannerView-Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F22VTWNS57;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chenhuizhang.CHBannerView-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

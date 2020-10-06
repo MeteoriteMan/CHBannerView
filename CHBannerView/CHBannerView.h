@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 
 /// 自定义计算当前Page.(分页位置)
 /// @param numberOfPages 计算用整个Pages(非dataSourcePage)
-- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;;
+- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
 /// 悬停位置代理
 /// @param bannerView bannerView
