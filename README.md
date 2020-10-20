@@ -162,6 +162,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.3.1|更改自定义计算Page方法.新增停止滚动时显示Item的方法.item无限重复时从何处开始布局的属性.是否允许手动滚动属性|
 |0.3.0|统一.m内NSInteger与NSUInteger数据类型为NSInteger.区分一次滚动与无限滚动.新增了自定义滚动范围以及计算当前Page的delegate方法|
 |0.2.4|支持iPad分屏模式|
 |0.2.3|完全禁止使用`init`方法创建|

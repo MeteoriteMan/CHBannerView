@@ -106,7 +106,7 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 /// BannerViewd的Bounces效果.默认为YES
 @property (nonatomic ,assign) BOOL bounces;
 
-/// 是否允许滚动
+/// 是否允许手动滚动
 @property (nonatomic ,assign) BOOL scrollEnable;
 
 /// 减速速度.范围0~1.0
