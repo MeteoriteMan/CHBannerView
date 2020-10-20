@@ -64,8 +64,8 @@
     [self addSubview:self.pageControl];
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.mas_safeAreaLayoutGuideTop).offset(-8);
-            make.right.equalTo(self.mas_safeAreaLayoutGuideRight).offset(-8);
+            make.bottom.equalTo(self.mas_safeAreaLayoutGuideBottom).offset(-12);
+            make.right.equalTo(self.mas_safeAreaLayoutGuideRight).offset(-12);
         } else {
             // Fallback on earlier versions
             make.bottom.equalTo(self.mas_bottom).offset(-8);

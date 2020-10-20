@@ -4,19 +4,19 @@
 
 > 默认样式
 
-![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
+![](./Asset/CHBannerView-%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
 
 > 自定义样式
 
-![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
+![](./Asset/CHBannerView-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%B7%E5%BC%8FDemo.gif?raw=true)
 
 > 0.2.0新增垂直滚动支持
 
->![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-VerticalScroll.gif?raw=true)
+>![](./Asset/CHBannerView-VerticalScroll.gif?raw=true)
 
 > 0.3.0新增Timer下滚动距离自定义支持
 
->![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHBannerView-Demo-iPhone%20X.gif?raw=true)
+>![](./Asset/CHBannerView-Demo-iPhone%20X.gif?raw=true)
 
 **转屏颜色变化是由于转屏后contentOffset位置变化需要重新计算.Cell为了调试方便我写的是设置的随机RGB色**
 
@@ -84,11 +84,18 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 /// 将要显示Cell代理.iOS8以上支持
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
 
-/// 自定义计算当前Page
-- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
+/// 自定义计算当前Page.
+/// @param numberOfPages 计算用整个Pages(非dataSourcePage)
+- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
 /// 自动滚动悬停位置代理
 - (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
+
+/// 停止滚动时显示的Item
+/// @param bannerView bannerView
+/// @param index 停止的Page
+/// @param orignalIndex 数据源对应的orignalIndex
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView showIndexWithoutScroll:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
 
 ```
 
