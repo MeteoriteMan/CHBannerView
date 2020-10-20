@@ -84,11 +84,18 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 /// 将要显示Cell代理.iOS8以上支持
 - (void)bannerView:(CHBannerView *_Nonnull)bannerView willDisplayCell:(UICollectionViewCell *_Nonnull)cell forItemAtIndex:(NSInteger)index NS_AVAILABLE_IOS(8_0);
 
-/// 自定义计算当前Page
-- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout;
+/// 自定义计算当前Page.
+/// @param numberOfPages 计算用整个Pages(非dataSourcePage)
+- (NSInteger)bannerView:(CHBannerView *_Nonnull)bannerView currentPageForScrollView:(UIScrollView *_Nonnull)scrollView flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
 /// 自动滚动悬停位置代理
 - (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
+
+/// 停止滚动时显示的Item
+/// @param bannerView bannerView
+/// @param index 停止的Page
+/// @param orignalIndex 数据源对应的orignalIndex
+- (void)bannerView:(CHBannerView *_Nonnull)bannerView showIndexWithoutScroll:(NSInteger)index orignalIndex:(NSInteger)orignalIndex;
 
 ```
 
@@ -155,6 +162,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.3.1|更改自定义计算Page方法.新增停止滚动时显示Item的方法.item无限重复时从何处开始布局的属性.是否允许手动滚动属性|
 |0.3.0|统一.m内NSInteger与NSUInteger数据类型为NSInteger.区分一次滚动与无限滚动.新增了自定义滚动范围以及计算当前Page的delegate方法|
 |0.2.4|支持iPad分屏模式|
 |0.2.3|完全禁止使用`init`方法创建|

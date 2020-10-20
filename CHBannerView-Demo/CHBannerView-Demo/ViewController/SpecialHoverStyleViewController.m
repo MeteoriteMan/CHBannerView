@@ -36,7 +36,7 @@
             }
             self.bannerModelArray = arrayM.copy;
 
-            if (self.bannerModelArray.count == 1) {// 居中
+            if (self.bannerModelArray.count == 1 && !self.bannerView.shouldItemInfinite) {// 居中
                 CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
                 CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
                 self.flowLayout.itemSize = CGSizeMake(width, height);
@@ -83,7 +83,7 @@
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
-    self.bannerView.shouldItemInfinite = NO;
+    self.bannerView.shouldItemInfinite = YES;
     self.bannerView.shouldShuffling = YES;
     self.bannerView.shouldAutoScroll = YES;
     self.bannerView.bounces = NO;
