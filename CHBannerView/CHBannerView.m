@@ -206,7 +206,8 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
         // 停止类型3
-        BOOL stop = scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
+//        BOOL stop = scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
+        BOOL stop = scrollView.tracking;
         if (stop) {
             [self scrollViewDidEndScroll:YES];
         }

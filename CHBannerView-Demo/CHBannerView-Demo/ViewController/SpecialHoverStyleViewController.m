@@ -83,11 +83,11 @@
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
-    self.bannerView.shouldItemInfinite = YES;
+    self.bannerView.shouldItemInfinite = NO;
     self.bannerView.shouldShuffling = YES;
     self.bannerView.shouldAutoScroll = YES;
     self.bannerView.bounces = NO;
-    self.bannerView.itemInfiniteLoadingMode = CHBannerViewItemInfiniteLoadingModeLeft;
+//    self.bannerView.itemInfiniteLoadingMode = CHBannerViewItemInfiniteLoadingModeLeft;
     
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
