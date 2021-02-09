@@ -426,6 +426,19 @@
     }
 }
 
+/// item是否无限重复
+- (BOOL)shouldItemInfinite {
+    if (_shouldItemInfinite == NO) {
+        return _shouldItemInfinite;
+    } else {
+        if (self.originalItems == 1 && self.cancelShufflingInSingleItem) {
+            return NO;
+        } else {
+            return _shouldItemInfinite;
+        }
+    }
+}
+
 - (void)didMoveToSuperview {
     if (@available(iOS 11.0, *)) {
         self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
