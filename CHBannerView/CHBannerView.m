@@ -243,7 +243,7 @@
         [self startTimer];
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:showIndexWithoutScroll:orignalIndex:)]) {
-        [self.delegate bannerView:self showIndexWithoutScroll:self.countPage orignalIndex:self.countPage];
+        [self.delegate bannerView:self showIndexWithoutScroll:self.countPage orignalIndex:self.currentPage];
     }
 }
 
