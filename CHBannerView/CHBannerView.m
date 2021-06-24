@@ -466,12 +466,16 @@
     return [self.collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
 }
 
-- (NSArray<NSIndexPath *> *)indexPathsForVisibleItems {
-    return [self.collectionView indexPathsForVisibleItems];
-}
-
 - (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *_Nonnull)indexPath {
     return [self.collectionView cellForItemAtIndexPath:indexPath];
+}
+
+- (NSArray<__kindof UICollectionViewCell *> *)visibleCells {
+    return self.collectionView.visibleCells;;
+}
+
+- (NSArray<NSIndexPath *> *)indexPathsForVisibleItems {
+    return self.collectionView.indexPathsForVisibleItems;
 }
 
 - (UIViewController *)ch_viewController {

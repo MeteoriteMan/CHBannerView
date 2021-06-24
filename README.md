@@ -158,10 +158,9 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 ## 更新记录
 
-**更新预告:1.准备未来版本中移除PageControl.**
-
 |版本|更新内容|
 |:--|:--|
+|0.3.4|修复showIndexWithoutScroll delegate方法|
 |0.3.3|修复cancelShufflingInSingleItem属性|
 |0.3.2|修复bounces状态下,边缘Cell滑动取消了Timer后不会重启Timer的问题|
 |0.3.1|更改自定义计算Page方法.新增停止滚动时显示Item的方法.item无限重复时从何处开始布局的属性.是否允许手动滚动属性|
