@@ -78,6 +78,10 @@
     return _timeInterval;
 }
 
+- (NSInteger)currentSelectItem {
+    return self.currentPage;
+}
+
 - (UICollectionViewFlowLayout *)flowLayout {
     return (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
 }

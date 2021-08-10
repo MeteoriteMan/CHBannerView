@@ -103,6 +103,9 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 /// 初始选中Item(默认是第一个:0)
 @property (nonatomic ,assign) NSInteger defaultSelectItem;
 
+/// 当前选中page,-1为初始化状态
+@property (readonly ,assign) NSInteger currentSelectItem;
+
 /// BannerViewd的Bounces效果.默认为YES
 @property (nonatomic ,assign) BOOL bounces;
 
@@ -111,7 +114,6 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 
 /// 减速速度.范围0~1.0
 @property(nonatomic , assign) UIScrollViewDecelerationRate decelerationRate API_AVAILABLE(ios(3.0));
-
 
 - (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 

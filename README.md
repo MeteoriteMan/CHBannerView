@@ -160,6 +160,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.3.5|新增currentSelectItem属性,获取当前bannerView选中的item|
 |0.3.4|修复showIndexWithoutScroll delegate方法|
 |0.3.3|修复cancelShufflingInSingleItem属性|
 |0.3.2|修复bounces状态下,边缘Cell滑动取消了Timer后不会重启Timer的问题|

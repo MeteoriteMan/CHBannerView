@@ -32,6 +32,13 @@
                 [arrayM addObject:[[NSObject alloc] init]];
             }
             self.bannerModelArray = arrayM.copy;
+            NSInteger defaultSelectItem = 0;
+            if (self.bannerView.currentSelectItem < self.bannerModelArray.count) {
+                defaultSelectItem = self.bannerView.currentSelectItem;
+            } else {
+                defaultSelectItem = self.bannerModelArray.count - 1;
+            }
+            self.bannerView.defaultSelectItem = defaultSelectItem;
             [self.bannerView reloadData];
             [[GlobalProgressHUD progressHUD] hideProgress];
         });
