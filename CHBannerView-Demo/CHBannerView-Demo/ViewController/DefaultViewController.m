@@ -66,6 +66,15 @@
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
     self.bannerView.timeInterval = 2;
+    
+    if (@available(iOS 15.1, *)) {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+    } else if (@available(iOS 15.0, *)) {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationNone;
+    } else {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+    }
+    
     [self.view addSubview:self.bannerView];
     [self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).offset(12);

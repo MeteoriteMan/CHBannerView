@@ -10,11 +10,27 @@
 #import "CHBannerCollectionViewFlowLayout.h"
 
 #define kSeed ([self shouldItemInfinite]?1000:1)
+/// 距离最小触发值
+#define kDefaultDragSpringbackInterval 8.0
+/// 速率最小触发值
+#define kDefaultDragSpringBackMinVelocity .1
+
+typedef NS_ENUM(NSUInteger, CHBannerViewDragVelocity) {
+    /// >= constant
+    CHBannerViewDragVelocitySection1,
+    /// > 0 && < constant
+    CHBannerViewDragVelocitySection2,
+    /// == 0
+    CHBannerViewDragVelocitySection3,
+    /// >= -constant && < 0
+    CHBannerViewDragVelocitySection4,
+    /// < constant
+    CHBannerViewDragVelocitySection5,
+};
 
 @interface CHBannerView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (nonatomic, strong ,nullable) UICollectionView *collectionView;
-
+/// 自动滚动Timer
 @property (nonatomic, strong) NSTimer *timer;
 
 /// 原始Item个数
@@ -46,9 +62,18 @@
     self.collectionView.scrollEnabled = scrollEnable;
 }
 
+- (void)setPagingEnabled:(BOOL)pagingEnabled {
+    self.collectionView.pagingEnabled = pagingEnabled;
+}
+
 - (void)setClipsToBounds:(BOOL)clipsToBounds {
     [super setClipsToBounds:clipsToBounds];
     self.collectionView.clipsToBounds = clipsToBounds;
+}
+
+- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled {
+    [super setUserInteractionEnabled:userInteractionEnabled];
+    self.collectionView.userInteractionEnabled = userInteractionEnabled;
 }
 
 - (void)setDecelerationRate:(UIScrollViewDecelerationRate)decelerationRate {
@@ -62,6 +87,10 @@
 
 - (BOOL)scrollEnable {
     return self.collectionView.scrollEnabled;
+}
+
+- (BOOL)pagingEnabled {
+    return self.collectionView.pagingEnabled;
 }
 
 - (UIScrollViewDecelerationRate)decelerationRate {
@@ -101,6 +130,7 @@
     self.shouldAutoScroll = YES;
     self.shouldItemInfinite = YES;
     self.shouldShuffling = YES;
+    self.scrollAnimateDuration = .25;
     
     if (!collectionViewLayout) {
         collectionViewLayout = [[CHBannerCollectionViewFlowLayout alloc] init];
@@ -168,11 +198,11 @@
         if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
             CGFloat offsetX = scrollView.contentOffset.x;
             CGFloat itemWidth = self.flowLayout.itemSize.width;
-            self.countPage = (offsetX + (itemWidth + self.flowLayout.minimumLineSpacing) * .5) / (itemWidth + self.flowLayout.minimumLineSpacing);
+            self.countPage = (offsetX + (scrollView.bounds.size.width + self.flowLayout.minimumLineSpacing) * .5 - self.flowLayout.headerReferenceSize.width) / (itemWidth + self.flowLayout.minimumLineSpacing);
         } else {
             CGFloat offsetY = scrollView.contentOffset.y;
             CGFloat itemHeight = self.flowLayout.itemSize.height;
-            self.countPage = (offsetY + (itemHeight + self.flowLayout.minimumLineSpacing) * .5) / (itemHeight + self.flowLayout.minimumLineSpacing);
+            self.countPage = (offsetY + (scrollView.bounds.size.height + self.flowLayout.minimumLineSpacing) * .5 - self.flowLayout.headerReferenceSize.height) / (itemHeight + self.flowLayout.minimumLineSpacing);
         }
     }
     if (self.originalItems != 0) {
@@ -200,6 +230,11 @@
 // MARK: 开始拖拽
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self stopTimer];
+    if (self.scrollAnimationOption != CHBannerViewAnimationNone) {
+        /// 去除UIScrollView的块动画
+        [self.layer removeAllAnimations];
+        [self.collectionView.layer removeAllAnimations];
+    }
 }
 
 /// ScrollView停止滚动动画.系统调用
@@ -210,7 +245,6 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
         // 停止类型3
-//        BOOL stop = scrollView.tracking && !scrollView.dragging && !scrollView.decelerating;
         BOOL stop = scrollView.tracking;
         if (stop) {
             [self scrollViewDidEndScroll:YES];
@@ -225,6 +259,115 @@
     if (stop) {
         [self scrollViewDidEndScroll:YES];
     }
+}
+
+/// MARK: 将要停止拖拽(手动处理需要停止的位置)
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    /// 获取当前的Page
+    NSInteger countPage = self.countPage;
+    CGPoint scrollEndPoint = CGPointZero;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerView:willEndDragging:withVelocity:currentPage:flowLayout:numberOfPages:)]) {
+        scrollEndPoint = [self.delegate bannerView:self willEndDragging:scrollView withVelocity:velocity currentPage:countPage flowLayout:self.flowLayout numberOfPages:self.originalItems * kSeed];
+    } else {
+        if (countPage < 0) {// 非法值
+            scrollEndPoint = CGPointMake(0, 0);
+        } else {
+            /// 判断位置
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:countPage inSection:0]];
+            if (!cell) {// 非法值
+                [scrollView scrollRectToVisible:CGRectMake(0, 0, scrollView.bounds.size.width, scrollView.bounds.size.height) animated:YES];
+            } else {
+                CGSize contentSize = scrollView.contentSize;
+                /// 速率
+                CHBannerViewDragVelocity dragVelocity = CHBannerViewDragVelocitySection3;
+                CGFloat velocitySpeed = 0.0;
+                if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+                    velocitySpeed = velocity.x;
+                } else {
+                    velocitySpeed = velocity.y;
+                }
+                if (velocitySpeed >= kDefaultDragSpringBackMinVelocity) {
+                    dragVelocity = CHBannerViewDragVelocitySection1;
+                } else if (velocitySpeed > 0 && velocitySpeed < kDefaultDragSpringBackMinVelocity) {
+                    dragVelocity = CHBannerViewDragVelocitySection2;
+                } else if (velocitySpeed == 0) {
+                    dragVelocity = CHBannerViewDragVelocitySection3;
+                } else if (velocitySpeed > -kDefaultDragSpringBackMinVelocity && velocitySpeed < 0) {
+                    dragVelocity = CHBannerViewDragVelocitySection4;
+                } else {
+                    dragVelocity = CHBannerViewDragVelocitySection5;
+                }
+                if (self.flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {// 水平滚动
+                    if (scrollView.contentOffset.x <= kDefaultDragSpringbackInterval ) {/// 处理左边界
+                        scrollEndPoint = CGPointMake(0.0, 0.0);
+                    } else if (scrollView.contentOffset.x + scrollView.bounds.size.width >= contentSize.width - kDefaultDragSpringbackInterval) {/// 处理右边界
+                        scrollEndPoint = CGPointMake(contentSize.width - scrollView.bounds.size.width, 0.0);
+                    } else if ( (dragVelocity == CHBannerViewDragVelocitySection4) ||
+                               (dragVelocity == CHBannerViewDragVelocitySection5) ) {/// 上一个
+                        NSInteger lastPage = countPage-1>=0?countPage-1:countPage;
+                        UICollectionViewCell *lastCell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:lastPage inSection:0]];
+                        if (!lastCell) {
+                            scrollEndPoint = CGPointMake(cell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                        } else {
+                            scrollEndPoint = CGPointMake(lastCell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                        }
+                    } else if ( (dragVelocity == CHBannerViewDragVelocitySection1) ||
+                               (dragVelocity == CHBannerViewDragVelocitySection2) ) {/// 下一个
+                        NSInteger nextPage = countPage+1<[self.collectionView numberOfItemsInSection:0]?countPage+1:countPage;
+                        UICollectionViewCell *nextCell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:nextPage inSection:0]];
+                        if (!nextCell) {
+                            scrollEndPoint = CGPointMake(cell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                        } else {
+                            scrollEndPoint = CGPointMake(nextCell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                        }
+                    } else if ( dragVelocity == CHBannerViewDragVelocitySection3 ) {
+                        scrollEndPoint = CGPointMake(cell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                    } else {/// 中线回弹处理
+                        scrollEndPoint = CGPointMake(cell.center.x - scrollView.bounds.size.width * .5, 0.0);
+                    }
+                    if (scrollEndPoint.x + scrollView.bounds.size.width > contentSize.width) {
+                        scrollEndPoint = CGPointMake(contentSize.width - scrollView.bounds.size.width, 0.0);
+                    } else if (scrollEndPoint.x < 0) {
+                        scrollEndPoint = CGPointMake(0.0, 0.0);
+                    }
+                } else {// 垂直滚动
+                    if (scrollView.contentOffset.y <= kDefaultDragSpringbackInterval ) {/// 处理上边界
+                        scrollEndPoint = CGPointMake(0.0, 0.0);
+                    } else if (scrollView.contentOffset.y + scrollView.bounds.size.height >= contentSize.height - kDefaultDragSpringbackInterval) {/// 处理下边界
+                        scrollEndPoint = CGPointMake(0.0, contentSize.height - scrollView.bounds.size.height);
+                    } else if ( (dragVelocity == CHBannerViewDragVelocitySection4) ||
+                               (dragVelocity == CHBannerViewDragVelocitySection5) ) {/// 上一个
+                        NSInteger lastPage = countPage-1>=0?countPage-1:countPage;
+                        UICollectionViewCell *lastCell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:lastPage inSection:0]];
+                        if (!lastCell) {
+                            scrollEndPoint = CGPointMake(0.0, cell.center.y - scrollView.bounds.size.height * .5);
+                        } else {
+                            scrollEndPoint = CGPointMake(0.0, lastCell.center.y - scrollView.bounds.size.height * .5);
+                        }
+                    } else if ( (dragVelocity == CHBannerViewDragVelocitySection1) ||
+                               (dragVelocity == CHBannerViewDragVelocitySection2) ) {/// 下一个
+                        NSInteger nextPage = countPage+1<[self.collectionView numberOfItemsInSection:0]?countPage+1:countPage;
+                        UICollectionViewCell *nextCell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:nextPage inSection:0]];
+                        if (!nextCell) {
+                            scrollEndPoint = CGPointMake(0.0, cell.center.y - scrollView.bounds.size.height * .5);
+                        } else {
+                            scrollEndPoint = CGPointMake(0.0, nextCell.center.y - scrollView.bounds.size.height * .5);
+                        }
+                    } else if ( dragVelocity == CHBannerViewDragVelocitySection3 ) {
+                        scrollEndPoint = CGPointMake(0.0, cell.center.y - scrollView.bounds.size.height * .5);
+                    } else {/// 中线回弹处理
+                        scrollEndPoint = CGPointMake(0.0, cell.center.y - scrollView.bounds.size.height * .5);
+                    }
+                    if (scrollEndPoint.y + scrollView.bounds.size.height > contentSize.height) {
+                        scrollEndPoint = CGPointMake(0.0, contentSize.height - scrollView.bounds.size.height);
+                    } else if (scrollEndPoint.y < 0) {
+                        scrollEndPoint = CGPointMake(0.0, 0.0);
+                    }
+                }
+            }
+        }
+    }
+    *targetContentOffset = scrollEndPoint;
 }
 
 /// MARK: scrollView停止滚动(user.是否是用户操作的)
@@ -257,6 +400,9 @@
     [self.collectionView reloadData];
     [self.collectionView setNeedsLayout];
     [self.collectionView layoutIfNeeded];
+    if (self.defaultSelectItem < 0) {
+        self.defaultSelectItem = 0;
+    }
     NSInteger compute = self.defaultSelectItem <= (self.originalItems - 1)?self.defaultSelectItem:0;
     [self resetContentOffsetWithComputeItem:compute];
     /// 绑定当前的countPage
@@ -346,6 +492,9 @@
                 decimals -= self.flowLayout.minimumLineSpacing;
             }
             nextContentOffset = CGPointMake(contentOffset.x - decimals + itemWidth + self.flowLayout.minimumLineSpacing, 0);
+            if (nextContentOffset.x > self.collectionView.contentSize.width - self.flowLayout.itemSize.width || nextContentOffset.x < 0.0) {
+                nextContentOffset = CGPointMake(0.0, 0.0);
+            }
         } else {
             CGFloat itemHeight = self.flowLayout.itemSize.height;
             CGPoint contentOffset = self.collectionView.contentOffset;
@@ -355,9 +504,43 @@
                 decimals -= self.flowLayout.minimumLineSpacing;
             }
             nextContentOffset = CGPointMake(0, contentOffset.y - decimals + itemHeight + self.flowLayout.minimumLineSpacing);
+            if (nextContentOffset.y > self.collectionView.contentSize.height - self.flowLayout.itemSize.height || nextContentOffset.y < 0.0) {
+                nextContentOffset = CGPointMake(0.0, 0.0);
+            }
         }
     }
-    [self.collectionView setContentOffset:nextContentOffset animated:YES];
+    if (self.scrollAnimationOption == CHBannerViewAnimationNone) {
+        [self.collectionView setContentOffset:nextContentOffset animated:YES];
+    } else {
+        UIViewAnimationOptions animationOption;
+        switch (self.scrollAnimationOption) {
+            case CHBannerViewAnimationOptionCurveEaseInOut: {
+                animationOption = UIViewAnimationOptionCurveEaseInOut;
+            }
+                break;
+            case CHBannerViewAnimationOptionCurveEaseIn: {
+                animationOption = UIViewAnimationOptionCurveEaseIn;
+            }
+                break;
+            case CHBannerViewAnimationOptionCurveEaseOut: {
+                animationOption = UIViewAnimationOptionCurveEaseOut;
+            }
+                break;
+            case CHBannerViewAnimationOptionCurveLinear: {
+                animationOption = UIViewAnimationOptionCurveLinear;
+            }
+                break;
+            default: {
+                animationOption = UIViewAnimationOptionCurveLinear;
+            }
+                break;
+        }
+        [UIScrollView animateWithDuration:self.scrollAnimateDuration delay:0 options:animationOption animations:^{
+            [self.collectionView setContentOffset:nextContentOffset];
+        } completion:^(BOOL finished) {
+            [self scrollViewDidEndScroll:NO];
+        }];
+    }
 }
 
 /**
@@ -430,12 +613,12 @@
     }
 }
 
-/// item是否无限重复
+/// items是否无限
 - (BOOL)shouldItemInfinite {
     if (_shouldItemInfinite == NO) {
         return _shouldItemInfinite;
     } else {
-        if (self.originalItems == 1 && self.cancelShufflingInSingleItem) {
+        if (self.originalItems == 1 && _cancelShufflingInSingleItem) {
             return NO;
         } else {
             return _shouldItemInfinite;
@@ -470,16 +653,25 @@
     return [self.collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
 }
 
-- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *_Nonnull)indexPath {
-    return [self.collectionView cellForItemAtIndexPath:indexPath];
-}
-
 - (NSArray<__kindof UICollectionViewCell *> *)visibleCells {
-    return self.collectionView.visibleCells;;
+    return self.collectionView.visibleCells;
 }
 
 - (NSArray<NSIndexPath *> *)indexPathsForVisibleItems {
     return self.collectionView.indexPathsForVisibleItems;
+}
+
+/// 当前倍数
+- (NSInteger)currentKSeed {
+    return kSeed;
+}
+
+- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *_Nonnull)indexPath {
+    return [self.collectionView cellForItemAtIndexPath:indexPath];
+}
+
+- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated {
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
 }
 
 - (UIViewController *)ch_viewController {

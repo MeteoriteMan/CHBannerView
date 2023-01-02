@@ -10,6 +10,7 @@
 #import "DefaultViewController.h"
 #import "3DViewController.h"
 #import "MinimumLineSpacingViewController.h"
+#import "HorizontalViewController.h"
 #import "VerticalViewController.h"
 #import "CHGuideView.h"
 #import "SpecialHoverStyleViewController.h"
@@ -30,11 +31,12 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.arrayTitle = @[@"默认样式" ,@"3DStyle" ,@"MinimumLineSpacing" ,@"Vertical" ,@"BannerViewForWindow" ,@"蚂蚁财富财富直通车样式"];
+    self.arrayTitle = @[@"默认样式" ,@"3DStyle" ,@"MinimumLineSpacing", @"Horizontal" ,@"Vertical" ,@"BannerViewForWindow" ,@"蚂蚁财富财富直通车样式"];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.backgroundColor = [UIColor clearColor];
     if (@available(iOS 11.0, *)) {
         self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
@@ -62,7 +64,9 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UITableViewCellID forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.text = self.arrayTitle[indexPath.row];
+    cell.textLabel.textColor = [UIColor colorWithRed:0.0 / 255.0 green:0.0 / 255.0 blue:0.0 / 255.0 alpha:1.];
     return cell;
 }
 
@@ -85,17 +89,22 @@ static NSString *UITableViewCellID = @"UITableViewCellID";
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 3: {//VerticalViewController
+        case 3: {//HorizontalViewController
+            HorizontalViewController *vc = [[HorizontalViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 4: {//VerticalViewController
             VerticalViewController *vc = [[VerticalViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 4: {//BannerViewForWindow
+        case 5: {//BannerViewForWindow
             CHGuideView *guideView = [[CHGuideView alloc] init];
             [guideView show];
         }
             break;
-        case 5: {//特殊悬停
+        case 6: {//特殊悬停
             SpecialHoverStyleViewController *vc = [[SpecialHoverStyleViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }

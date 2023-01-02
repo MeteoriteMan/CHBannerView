@@ -35,27 +35,6 @@
                 [arrayM addObject:[[NSObject alloc] init]];
             }
             self.bannerModelArray = arrayM.copy;
-
-            if (self.bannerModelArray.count == 1 && !self.bannerView.shouldItemInfinite) {// 居中
-                CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
-                CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
-                self.flowLayout.itemSize = CGSizeMake(width, height);
-                self.flowLayout.minimumLineSpacing = 20;
-                self.flowLayout.minimumInteritemSpacing = 0;
-                CGFloat headerFooterInterval = (UIScreen.mainScreen.bounds.size.width - width) * .5;
-                self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
-                self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
-            } else {
-                CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
-                CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
-                self.flowLayout.itemSize = CGSizeMake(width, height);
-                self.flowLayout.minimumLineSpacing = 20;
-                self.flowLayout.minimumInteritemSpacing = 0;
-                CGFloat headerFooterInterval = 20;
-                self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
-                self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
-            }
-            
             NSInteger defaultSelectItem = 0;
             if (self.bannerView.currentSelectItem < self.bannerModelArray.count) {
                 defaultSelectItem = self.bannerView.currentSelectItem;
@@ -89,6 +68,13 @@
     self.bannerView = [[CHBannerView alloc] initWithCollectionViewLayout:self.flowLayout];
     self.bannerView.dataSource = self;
     self.bannerView.delegate = self;
+    if (@available(iOS 15.1, *)) {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+    } else if (@available(iOS 15.0, *)) {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationNone;
+    } else {
+        self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+    }
     self.bannerView.timeInterval = 2;
     self.bannerView.shouldItemInfinite = NO;
     self.bannerView.shouldShuffling = YES;
@@ -177,6 +163,29 @@
         contentOffsetX = nextPage * flowLayout.itemSize.width  + nextPage * flowLayout.minimumLineSpacing + flowLayout.headerReferenceSize.width - (scrollView.bounds.size.width * .5 - flowLayout.itemSize.width * .5);
     }
     return CGPointMake(contentOffsetX, 0.0);
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (self.bannerModelArray.count == 1 && !self.bannerView.shouldItemInfinite) {// 居中
+        CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
+        CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
+        self.flowLayout.itemSize = CGSizeMake(width, height);
+        self.flowLayout.minimumLineSpacing = 20;
+        self.flowLayout.minimumInteritemSpacing = 0;
+        CGFloat headerFooterInterval = (UIScreen.mainScreen.bounds.size.width - width) * .5;
+        self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+        self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+    } else {
+        CGFloat height = 160 * UIScreen.mainScreen.bounds.size.width / 375.0;
+        CGFloat width = 270 * UIScreen.mainScreen.bounds.size.width / 375.0;
+        self.flowLayout.itemSize = CGSizeMake(width, height);
+        self.flowLayout.minimumLineSpacing = 20;
+        self.flowLayout.minimumInteritemSpacing = 0;
+        CGFloat headerFooterInterval = 20;
+        self.flowLayout.headerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+        self.flowLayout.footerReferenceSize = CGSizeMake(headerFooterInterval, 0);
+    }
 }
 
 // Action

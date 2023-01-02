@@ -18,6 +18,8 @@
 
 >![](./Asset/CHBannerView-Demo-iPhone%20X.gif?raw=true)
 
+> 0.4.0新增自动滚动自定义动画解决iOS[15.0, 15.1)动画不展示的问题.
+
 **转屏颜色变化是由于转屏后contentOffset位置变化需要重新计算.Cell为了调试方便我写的是设置的随机RGB色**
 
 ## 使用
@@ -145,6 +147,40 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 }
 ```
 
+**7.iOS[15.0, 15.1)系统动画不显示问题**
+
+**如Cell与CollectionView大小不一致,直接设置如下属性即可.**
+```
+if (@available(iOS 15.1, *)) {
+	self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+} else if (@available(iOS 15.0, *)) {
+	self.bannerView.scrollAnimationOption = CHBannerViewAnimationNone;
+} else {
+	self.bannerView.scrollAnimationOption = CHBannerViewAnimationOptionCurveLinear;
+}
+```
+**如Cell大小与CollectionView大小一致,则需要给CollectionView增加一个父控件,大小与调整前的CollectionView一致,并且设置clipsToBounds = YES.然后将collectionView向外拓充部分,并且保证itemSize与调整前相同**
+
+```
+// 如横向滚动的banner
+...
+self.bannerViewContent.clipsToBounds = YES;
+[self.view addSubview:self.bannerViewContent];
+[self.bannerViewContent mas_makeConstraints:^(MASConstraintMaker *make) {
+	make.top.equalTo(self.mas_topLayoutGuide).offset(12);
+	make.left.right.offset(0);
+		make.height.offset(190).multipliedBy(UIScreen.mainScreen.bounds.size.width / 375.0);
+}];
+...
+[self.bannerViewContent addSubview:self.bannerView];
+[self.bannerView mas_makeConstraints:^(MASConstraintMaker *make) {
+	make.left.offset(-1.0);
+	make.right.offset(1.0);
+	make.top.bottom.offset(0);
+}];
+...
+```
+
 
 ## 安装
 
@@ -160,6 +196,7 @@ xxx *cell = [bannerView dequeueReusableCellWithReuseIdentifier:@"XXXID" forIndex
 
 |版本|更新内容|
 |:--|:--|
+|0.4.0|优化拖拽回弹效果,新增自定义动画解决iOS[15.0,15.1)系统动画显示问题.|
 |0.3.5|新增currentSelectItem属性,获取当前bannerView选中的item|
 |0.3.4|修复showIndexWithoutScroll delegate方法|
 |0.3.3|修复cancelShufflingInSingleItem属性|

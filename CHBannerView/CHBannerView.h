@@ -11,8 +11,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
-    CHBannerViewItemInfiniteLoadingModeMiddle,
+    CHBannerViewItemInfiniteLoadingModeMiddle = 0,
     CHBannerViewItemInfiniteLoadingModeLeft,
+};
+
+typedef NS_ENUM(NSUInteger, CHBannerViewAnimationOption) {
+    CHBannerViewAnimationNone = 0,
+    CHBannerViewAnimationOptionCurveEaseInOut,
+    CHBannerViewAnimationOptionCurveEaseIn,
+    CHBannerViewAnimationOptionCurveEaseOut,
+    CHBannerViewAnimationOptionCurveLinear,
 };
 
 @class CHBannerView;
@@ -60,6 +68,14 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 /// @param numberOfPages 计算用整个Pages(非dataSourcePage)
 - (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView nextHoverPointForScrollView:(UIScrollView *_Nonnull)scrollView currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
 
+/// Drag停止后需要停止的位置
+/// @param bannerView bannerView
+/// @param scrollView 轮播图容器
+/// @param currentPage 计算用当前Page(非dataSourcePage)
+/// @param flowLayout flowLayout
+/// @param numberOfPages 计算用整个Pages(非dataSourcePage)
+- (CGPoint)bannerView:(CHBannerView *_Nonnull)bannerView willEndDragging:(UIScrollView *_Nonnull)scrollView withVelocity:(CGPoint)point currentPage:(NSInteger)currentPage flowLayout:(UICollectionViewFlowLayout *_Nonnull)flowLayout numberOfPages:(NSInteger)numberOfPages;
+
 /// 停止滚动时显示的Item
 /// @param bannerView bannerView
 /// @param index 停止的Page
@@ -73,53 +89,70 @@ typedef NS_ENUM(NSUInteger, CHBannerViewItemInfiniteLoadingMode) {
 /// 初始化创建方法.
 - (instancetype _Nonnull)initWithCollectionViewLayout:(UICollectionViewLayout * _Nullable)collectionViewLayout;
 
-@property (nonatomic ,assign ,nullable) id <CHBannerViewDataSource> dataSource;
+@property (nonatomic, weak, nullable) id <CHBannerViewDataSource> dataSource;
 
-@property (nonatomic ,assign ,nullable) id <CHBannerViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id <CHBannerViewDelegate> delegate;
+
+@property (nonatomic, strong, nullable) UICollectionView *collectionView;
 
 #pragma mark property
 
 /// 是否允许自动滚动,默认为YES
-@property (nonatomic ,assign) BOOL shouldAutoScroll;
+@property (nonatomic, assign) BOOL shouldAutoScroll;
 
 /// 在数据源个数为1的时候是否停止自动滚动,默认为NO
-@property (nonatomic ,assign) BOOL stopAutoScrollInSingleItem;
+@property (nonatomic, assign) BOOL stopAutoScrollInSingleItem;
 
 /// item是否无限,默认为YES.为NO时,当展示第一个item时,左边无item
-@property (nonatomic ,assign) BOOL shouldItemInfinite;
+@property (nonatomic, assign) BOOL shouldItemInfinite;
 
 /// shouldItemInfinite为YES时的从哪里开始布局.默认从中间
-@property (nonatomic ,assign) CHBannerViewItemInfiniteLoadingMode itemInfiniteLoadingMode;
+@property (nonatomic, assign) CHBannerViewItemInfiniteLoadingMode itemInfiniteLoadingMode;
 
 /// 不停轮播,默认为YES.当一轮滚动完了后不再滚动,设置为NO.
-@property (nonatomic ,assign) BOOL shouldShuffling;
+@property (nonatomic, assign) BOOL shouldShuffling;
 
 /// 在个数为1的时候取消无限轮播,默认为NO
-@property (nonatomic ,assign) BOOL cancelShufflingInSingleItem;
+@property (nonatomic, assign) BOOL cancelShufflingInSingleItem;
 
 /// 滚动时间间隔.默认5s
-@property (nonatomic ,assign) NSTimeInterval timeInterval;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
 
 /// 初始选中Item(默认是第一个:0)
-@property (nonatomic ,assign) NSInteger defaultSelectItem;
+@property (nonatomic, assign) NSInteger defaultSelectItem;
 
 /// 当前选中page,-1为初始化状态
-@property (readonly ,assign) NSInteger currentSelectItem;
+@property (readonly, assign) NSInteger currentSelectItem;
 
 /// BannerViewd的Bounces效果.默认为YES
-@property (nonatomic ,assign) BOOL bounces;
+@property (nonatomic, assign) BOOL bounces;
 
 /// 是否允许手动滚动
-@property (nonatomic ,assign) BOOL scrollEnable;
+@property (nonatomic, assign) BOOL scrollEnable;
+
+/// 整页滚动
+@property (nonatomic, assign) BOOL pagingEnabled;
 
 /// 减速速度.范围0~1.0
-@property(nonatomic , assign) UIScrollViewDecelerationRate decelerationRate API_AVAILABLE(ios(3.0));
+@property (nonatomic, assign) UIScrollViewDecelerationRate decelerationRate API_AVAILABLE(ios(3.0));
 
-- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+/// 滚动Option.默认为None
+@property (nonatomic, assign) CHBannerViewAnimationOption scrollAnimationOption;
+
+/// scrollAnimationOption为None时,设置无效.默认.25 (scrollAnimateDuration + 滚动停止后的时间 == timeInterval)
+@property (nonatomic, assign) NSTimeInterval scrollAnimateDuration;
 
 @property (nonatomic, readonly) NSArray<__kindof UICollectionViewCell *> *visibleCells;
 
-@property (nonatomic, readonly) NSArray<NSIndexPath *> *indexPathsForVisibleItems;
+/// 当前显示的Item的indexPaths
+@property (nonatomic, readonly) NSArray<NSIndexPath *> * _Nullable indexPathsForVisibleItems;
+
+/// 当前倍数
+@property (nonatomic, readonly) NSInteger currentKSeed;
+
+- (nullable UICollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *_Nonnull)indexPath;
+
+- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated;
 
 #pragma mark reloadData
 

@@ -19,6 +19,8 @@
 		432AE05E21DF265D00848863 /* CollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */; };
 		432AE05F21DF265D00848863 /* CHBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */; };
 		4346FAD522C30814004ABA45 /* 3DViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4346FAD422C30814004ABA45 /* 3DViewController.m */; };
+		437C691B2962B95D002A0795 /* HorizontalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 437C691A2962B95D002A0795 /* HorizontalViewController.m */; };
+		437C691E2962B983002A0795 /* HorizontalCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 437C691D2962B983002A0795 /* HorizontalCollectionViewFlowLayout.m */; };
 		43BCABEC226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BCABEB226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m */; };
 		43C11EDA228906D000564C23 /* DefaultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11ED9228906D000564C23 /* DefaultViewController.m */; };
 		43C11EE02289109500564C23 /* GlobalProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C11EDF2289109500564C23 /* GlobalProgressHUD.m */; };
@@ -60,6 +62,10 @@
 		432AE05D21DF265D00848863 /* CHBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHBannerCollectionViewCell.m; sourceTree = "<group>"; };
 		4346FAD322C30814004ABA45 /* 3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3DViewController.h; sourceTree = "<group>"; };
 		4346FAD422C30814004ABA45 /* 3DViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = 3DViewController.m; sourceTree = "<group>"; };
+		437C69192962B95D002A0795 /* HorizontalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalViewController.h; sourceTree = "<group>"; };
+		437C691A2962B95D002A0795 /* HorizontalViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalViewController.m; sourceTree = "<group>"; };
+		437C691C2962B983002A0795 /* HorizontalCollectionViewFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		437C691D2962B983002A0795 /* HorizontalCollectionViewFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		43BCABEA226F0A6300A37186 /* MinimumLineSpacingFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimumLineSpacingFlowLayout.h; sourceTree = "<group>"; };
 		43BCABEB226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinimumLineSpacingFlowLayout.m; sourceTree = "<group>"; };
 		43C11ED8228906D000564C23 /* DefaultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultViewController.h; sourceTree = "<group>"; };
@@ -168,6 +174,8 @@
 				43BCABEB226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m */,
 				432AE05A21DF265D00848863 /* CollectionViewFlowLayout.h */,
 				432AE05B21DF265D00848863 /* CollectionViewFlowLayout.m */,
+				437C691C2962B983002A0795 /* HorizontalCollectionViewFlowLayout.h */,
+				437C691D2962B983002A0795 /* HorizontalCollectionViewFlowLayout.m */,
 				43C11EE42289374800564C23 /* VerticalCollectionViewFlowLayout.h */,
 				43C11EE52289374800564C23 /* VerticalCollectionViewFlowLayout.m */,
 				D61853EA24FEAF06002D4F31 /* GuideViewFlowLayout.h */,
@@ -191,6 +199,8 @@
 				4346FAD422C30814004ABA45 /* 3DViewController.m */,
 				43C11EE1228913C900564C23 /* MinimumLineSpacingViewController.h */,
 				43C11EE2228913C900564C23 /* MinimumLineSpacingViewController.m */,
+				437C69192962B95D002A0795 /* HorizontalViewController.h */,
+				437C691A2962B95D002A0795 /* HorizontalViewController.m */,
 				43C11EE72289377A00564C23 /* VerticalViewController.h */,
 				43C11EE82289377A00564C23 /* VerticalViewController.m */,
 				D65DB47525014AFA0001612D /* SpecialHoverStyleViewController.h */,
@@ -354,11 +364,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				437C691B2962B95D002A0795 /* HorizontalViewController.m in Sources */,
 				43143746252566670084AEA1 /* ViewController.m in Sources */,
 				43C11EED228940EE00564C23 /* MessageCell.m in Sources */,
 				43C11EE62289374800564C23 /* VerticalCollectionViewFlowLayout.m in Sources */,
 				430AD61E21E30FAB00C2BF36 /* CHBannerCollectionViewFlowLayout.m in Sources */,
 				4346FAD522C30814004ABA45 /* 3DViewController.m in Sources */,
+				437C691E2962B983002A0795 /* HorizontalCollectionViewFlowLayout.m in Sources */,
 				D65DB47A25014BA70001612D /* SpecialHoverStyleFlowLayout.m in Sources */,
 				D61853EC24FEAF06002D4F31 /* GuideViewFlowLayout.m in Sources */,
 				43BCABEC226F0A6300A37186 /* MinimumLineSpacingFlowLayout.m in Sources */,
@@ -522,7 +534,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "CHBannerView-Demo/CHBannerView-Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F22VTWNS57;
+				DEVELOPMENT_TEAM = XCNQSAZY6S;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -531,7 +543,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.chenhuizhang.CHBannerView-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chenhuizhang.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -547,7 +559,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "CHBannerView-Demo/CHBannerView-Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F22VTWNS57;
+				DEVELOPMENT_TEAM = XCNQSAZY6S;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CHBannerView-Demo/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = "CHBannerView-Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -556,7 +568,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.chenhuizhang.CHBannerView-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.chenhuizhang.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;

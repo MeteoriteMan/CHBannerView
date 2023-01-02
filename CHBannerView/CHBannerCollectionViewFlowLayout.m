@@ -23,31 +23,6 @@
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 }
 
-- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
-    CGPoint loc = [super targetContentOffsetForProposedContentOffset:proposedContentOffset withScrollingVelocity:velocity];
-    CGRect rect = CGRectMake(proposedContentOffset.x , 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
-    NSArray *itemsArray = [self layoutAttributesForElementsInRect:rect];
-    CGFloat comonX = proposedContentOffset.x  + self.collectionView.bounds.size.width * .5;
-    CGFloat maxDistance = CGFLOAT_MAX;
-    CGFloat minDistance = 0;
-    UICollectionViewLayoutAttributes *minattr = [[UICollectionViewLayoutAttributes alloc] init];
-    for (UICollectionViewLayoutAttributes *attr in itemsArray) {
-        CGFloat distance = attr.center.x - comonX;
-        if (ABS(distance) < maxDistance) {
-            maxDistance = ABS(distance);
-            minDistance = distance;
-            minattr = attr;
-        }
-    }
-    loc = CGPointMake(minattr.center.x - self.collectionView.bounds.size.width * .5, loc.y);
-    if (loc.x < 0) {
-        loc = CGPointMake(0.0, loc.y);
-    } else if (loc.x > self.collectionView.contentSize.width - self.collectionView.bounds.size.width) {
-        loc = CGPointMake(self.collectionView.contentSize.width - self.collectionView.bounds.size.width, loc.y);
-    }
-    return loc;
-}
-
 - (nullable NSArray<__kindof UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSArray <UICollectionViewLayoutAttributes *>*itemsArray = [super layoutAttributesForElementsInRect:rect];
     CGFloat screenW = self.collectionView.bounds.size.width;
